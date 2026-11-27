@@ -143,7 +143,32 @@
     <tr><td><b>Unusual but true reading</b></td><td>Saying yes twice force-saves, and the entry is flagged for the supervisor.</td></tr>
     <tr><td><b>No internet</b></td><td>Readings are stored on the phone (IndexedDB) with a sync queue. Browser speech needs internet, so offline entry uses the keypad or typed input.</td></tr>
   </table>
-  <p class="src">Every rule above is deterministic code with unit tests: 84 tests cover the parser, name matching, WHO z-scores, plausibility and full conversations in English and Marathi.</p>
+  <p class="src">Every rule above is deterministic code with unit tests: 95 tests cover the parser, name matching, WHO z-scores, plausibility and full conversations in English and Marathi.</p>
+</section>
+
+<!-- 6b -->
+<section class="slide">
+  <h1>Beyond entry: what voice capture makes possible</h1>
+  <div class="cols c3" style="gap:20px">
+    <div class="card">
+      <h2>Data honesty score</h2>
+      <p style="font-size:17px">WHO/UNICEF and SMART data-quality checks run on every centre: bias-adjusted digit preference, copied heights, duplicates and implausible z-scores. Numbers typed in later heap on .0 and .5. Numbers spoken at the scale do not. Demo centre: <b>typed register 46/100 vs spoken 100/100</b>. Because voice records when and how each value was captured, a supervisor can trust it. Poshan Tracker has no such check.</p>
+      <img src="img/honesty.png" alt="Data honesty: typed in later 42 out of 100 with heaping on .0 and .5; spoken at the scale 100 out of 100" style="width:100%; height:175px; object-fit:cover; object-position:top; border-radius:12px; margin-top:10px" />
+    </div>
+    <div class="card">
+      <h2>Growth-faltering watch list</h2>
+      <p style="font-size:17px">Rules based on trajectory, following the finding (Dimagi and American India Foundation, anganwadi data) that the last 2–4 months predict malnutrition best. The rules flag flat weight for 2 months, WHZ sliding toward −2, or gain far below WHO norms. In the demo, Riya was flagged as "sliding" <b>before</b> today's reading showed SAM. The app reads the list aloud: <span class="say">Speak the list</span>.</p>
+      <img src="img/watchlist.png" alt="Watch list: Riya Pawar severe acute malnutrition, Soham Chavan no weight gain for 2 months" style="width:100%; height:175px; object-fit:cover; object-position:top; border-radius:12px; margin-top:10px" />
+    </div>
+    <div class="card">
+      <h2>A message for the family</h2>
+      <p style="font-size:17px">After every reading, a short note in Marathi or Hindi gives the weight, the change, one action and the next visit. It is played aloud at the centre or sent on WhatsApp:</p>
+      <p style="font-size:17px; margin-top:8px; background:var(--paper); border-radius:12px; padding:10px">नमस्कार सुनीलजी. आज रियाचे वजन 6.6 किलो आहे. मागच्या महिन्यापेक्षा 600 ग्रॅम कमी झाले. गुरुवारी रियाला अंगणवाडीत घेऊन या…</p>
+      <p style="font-size:17px; margin-top:8px">Generic broadcast voice messages (Kilkari RCT) had weak nutrition effects. This one is about <b>this child, this reading</b>.</p>
+      <h2 style="margin-top:14px">Typing vs voice, measured</h2>
+      <p style="font-size:17px">A built-in stopwatch races a typical typed form against the voice time recorded for every entry. The numbers are real, not claimed.</p>
+    </div>
+  </div>
 </section>
 
 <!-- 7 -->
@@ -204,8 +229,9 @@
       <p style="font-size:24px"><b>Working prototype today</b></p>
       <ul style="margin-top:8px">
         <li>One core flow end to end: speak, match, read back, check, save, alert, refer, export.</li>
+        <li>Data honesty score, faltering watch list, family voice message, typing-vs-voice race.</li>
         <li>Marathi, Hindi and English voice and UI.</li>
-        <li>Runs with one command and no keys; offline storage; 84 automated tests.</li>
+        <li>Runs with one command and no keys; offline storage; 95 automated tests.</li>
       </ul>
     </div>
     <div>

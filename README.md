@@ -45,7 +45,9 @@ Microphone access needs `localhost` or HTTPS. On a phone, use an HTTPS deploymen
 | `haan`, then `haan` | Applies 82 and reads back, then saves |
 | `kon baaki aahe` / `kaun baaki hai` | Speaks the names of children not weighed yet |
 | `maagcha radd kara` / `pichhla wapas lo` | Undoes the last entry |
-| `session band kara` | Speaks the summary; then Summary has the CSV export and the sync queue |
+| `session band kara` | Speaks the summary. The Summary tab then shows the **data honesty** comparison (typed-later register scores about 46/100, spoken readings about 100/100), the time per child, the sync queue and the CSV export |
+| Alerts tab → **Speak the list** | Speaks the growth-faltering watch list. Riya Pawar was already flagged as "sliding" before today's reading |
+| Summary → **⏱ Typing vs voice** | Fill the typed form against a stopwatch. Compare it with the measured voice seconds per child |
 
 Marathi script works too: `रिया पवार सहा पॉइंट सहा किलो चौऱ्याहत्तर सेंटीमीटर`.
 
@@ -75,7 +77,12 @@ Marathi script works too: `रिया पवार सहा पॉइंट �
 | Offline-first storage (IndexedDB). Each reading keeps its transcript, corrected and forced flags, and engine. Undo voids the entry and never deletes it. Sync queue | [`web/src/lib/db.ts`](web/src/lib/db.ts) |
 | Poshan Tracker-shaped CSV export, and a referral slip shared through a WhatsApp link | [`web/src/lib/export.ts`](web/src/lib/export.ts) |
 | Mobile-first PWA UI in three languages: read-back card, WHO band ribbon, growth chart, alerts, summary, keypad, and a conversation trace on wide screens | [`web/src/App.tsx`](web/src/App.tsx), [`web/src/components/`](web/src/components) |
-| Demo roster of 24 children with 3 months of WHO-realistic history | [`web/src/lib/seed.ts`](web/src/lib/seed.ts) |
+| **Data honesty score.** WHO/UNICEF 2019 and SMART data-quality checks: bias-adjusted digit preference score, copied heights, duplicate readings, implausible z-scores and SD of WHZ. Adds voice provenance (captured live at the scale vs typed in later). Compares last month's typed register with today's spoken readings | [`web/src/lib/quality.ts`](web/src/lib/quality.ts), [`web/src/components/QualityCard.tsx`](web/src/components/QualityCard.tsx) |
+| **Growth-faltering watch list.** Rules: SAM/MAM, flat or falling weight for 2 months, WHZ sliding toward −2 SD, or gain far below the WHO median. Ranked and spoken aloud on request | [`web/src/lib/watchlist.ts`](web/src/lib/watchlist.ts) |
+| **Personal message for the family** after every reading, in Marathi, Hindi or English: today's weight, the change since last month, one action and the next visit. Played aloud or shared on WhatsApp. Deterministic templates, no generated medical advice | [`web/src/lib/counsel.ts`](web/src/lib/counsel.ts) |
+| **Typing vs voice race.** A stopwatch over a typical typed entry form, compared with the *measured* voice time per child (every voice entry records how long it took) | [`web/src/components/RaceView.tsx`](web/src/components/RaceView.tsx) |
+| Read-back states the change ("Down 600 grams"). A HEARD → UNDERSTOOD bar, plus distinct sounds for "saved" and "please check" | [`web/src/lib/engine.ts`](web/src/lib/engine.ts), [`web/src/lib/speech.ts`](web/src/lib/speech.ts) |
+| Demo roster of 24 children with 3 months of WHO-realistic history. The past months were "typed in later" and heap on .0/.5 like real registers | [`web/src/lib/seed.ts`](web/src/lib/seed.ts) |
 
 **Design rule: the model transcribes, code decides.** Speech-to-text only produces text. Every number, match, check and classification is deterministic, tested code. No LLM is needed, and none is used.
 
@@ -120,7 +127,7 @@ The server (`server/server.mjs`, with no npm dependencies) serves the built app 
 ## Tests
 
 ```bash
-cd web && npm install && npm test      # 84 unit and flow tests
+cd web && npm install && npm test      # 95 unit and flow tests
 python e2e/smoke.py http://localhost:8080   # Playwright run of the full demo flow + screenshots
 ```
 
