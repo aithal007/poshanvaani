@@ -1,0 +1,7 @@
+**/node_modules
+web/dist
+e2e/shots
+.git
+docs
+*.md
+.env

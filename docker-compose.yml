@@ -1,0 +1,10 @@
+services:
+  poshanvaani:
+    build: .
+    image: poshanvaani:latest
+    ports:
+      - "8080:8080"
+    environment:
+      # Optional. Without it the app uses free browser speech and shows "key not set" for Sarvam.
+      SARVAM_API_KEY: ${SARVAM_API_KEY:-}
+    restart: unless-stopped

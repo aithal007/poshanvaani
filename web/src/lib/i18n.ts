@@ -70,7 +70,7 @@ const mr: Phrases = {
     endSession: "सत्र संपवा", pendingList: "बाकी मुले", noAlerts: "आज कोणतीही सूचना नाही",
     keypad: "आकडे भरा", save: "जतन करा", cancel: "रद्द", settings: "सेटिंग्ज", language: "भाषा",
     voiceEngine: "आवाज ओळख", keyNotSet: "key not set", handsFree: "हात मोकळे मोड", history: "इतिहास",
-    faltering: "वजन वाढले नाही", reset: "डेमो डेटा पुन्हा भरा", suggestion: "कदाचित",
+    faltering: "वजन वाढले नाही", whichOne: "कोणते मूल?", reset: "डेमो डेटा पुन्हा भरा", suggestion: "कदाचित",
   },
 };
 
@@ -113,7 +113,7 @@ const hi: Phrases = {
     endSession: "सत्र खत्म करें", pendingList: "बाकी बच्चे", noAlerts: "आज कोई अलर्ट नहीं",
     keypad: "नंबर भरें", save: "सेव करें", cancel: "रद्द", settings: "सेटिंग्स", language: "भाषा",
     voiceEngine: "आवाज़ पहचान", keyNotSet: "key not set", handsFree: "हैंड्स-फ्री मोड", history: "इतिहास",
-    faltering: "वजन नहीं बढ़ा", reset: "डेमो डेटा फिर से भरें", suggestion: "शायद",
+    faltering: "वजन नहीं बढ़ा", whichOne: "कौन सा बच्चा?", reset: "डेमो डेटा फिर से भरें", suggestion: "शायद",
   },
 };
 
@@ -154,7 +154,7 @@ const en: Phrases = {
     endSession: "End session", pendingList: "Not weighed yet", noAlerts: "No alerts today",
     keypad: "Enter numbers", save: "Save", cancel: "Cancel", settings: "Settings", language: "Language",
     voiceEngine: "Speech engine", keyNotSet: "key not set", handsFree: "Hands-free mode", history: "History",
-    faltering: "No weight gain", reset: "Reload demo data", suggestion: "Maybe",
+    faltering: "No weight gain", whichOne: "Which child?", reset: "Reload demo data", suggestion: "Maybe",
   },
 };
 
