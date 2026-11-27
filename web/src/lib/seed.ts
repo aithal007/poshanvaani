@@ -33,7 +33,7 @@ const SPECS: Spec[] = [
   { name: "Shravani Deshmukh", nameLocal: "श्रावणी देशमुख", parent: "Ajay Deshmukh", sex: "F", months: 27, wz: -0.9, hz: -1.2, weighedToday: true },
   { name: "Vedant Gaikwad", nameLocal: "वेदांत गायकवाड", parent: "Sachin Gaikwad", sex: "M", months: 6, wz: 0.2, hz: 0.1 },
   { name: "Ananya Kulkarni", nameLocal: "अनन्या कुलकर्णी", parent: "Prasad Kulkarni", sex: "F", months: 45, wz: 0.1, hz: 0.3, weighedToday: true },
-  { name: "Soham Chavan", nameLocal: "सोहम चव्हाण", parent: "Rahul Chavan", sex: "M", months: 18, wz: -1.6, hz: -1.9 },
+  { name: "Soham Chavan", nameLocal: "सोहम चव्हाण", parent: "Rahul Chavan", sex: "M", months: 18, wz: -1.6, hz: -1.9, weights: [9.6, 9.6, 9.5] },
   { name: "Tanvi Bhosale", nameLocal: "तन्वी भोसले", parent: "Nitin Bhosale", sex: "F", months: 36, wz: -1.0, hz: -1.4 },
   { name: "Arjun Salunkhe", nameLocal: "अर्जुन साळुंखे", parent: "Dattatray Salunkhe", sex: "M", months: 58, wz: -0.7, hz: -0.9, weighedToday: true },
   { name: "Pari Waghmare", nameLocal: "परी वाघमारे", parent: "Sandip Waghmare", sex: "F", months: 4, wz: -0.3, hz: -0.2 },
@@ -65,13 +65,23 @@ export function buildSeed(today = new Date()) {
     children.push({ id, name: s.name, nameLocal: s.nameLocal, parentName: s.parent, sex: s.sex, dob });
 
     const visits = s.weighedToday ? [3, 2, 1, 0] : [3, 2, 1];
+    let prevHeight: number | undefined;
     visits.forEach((back, k) => {
       const at = new Date(today.getTime() - back * 30 * DAY + (back ? 0 : -2 * 3600 * 1000));
       const ageDays = Math.round((at.getTime() - dobDate.getTime()) / DAY);
-      const weightKg = round1(
+      let weightKg = round1(
         s.weights?.[k] ?? valueAtZ("wfa", s.sex, ageDays, s.wz + ((i * 7 + k) % 5) * 0.03)
       );
-      const heightCm = round1(valueAtZ("lhfa", s.sex, ageDays, s.hz));
+      let heightCm = round1(valueAtZ("lhfa", s.sex, ageDays, s.hz));
+      // Past months were written on paper and typed in later: like real
+      // registers, they heap on .0/.5 and some heights are copied forward.
+      // Today's readings were captured live by voice at full precision.
+      if (back > 0) {
+        if (!s.weights && i % 3 !== 0) weightKg = Math.round(weightKg * 2) / 2;
+        if (i % 4 === 1 && prevHeight !== undefined) heightCm = prevHeight;
+        else if (i % 3 !== 2) heightCm = Math.round(heightCm * 2) / 2;
+      }
+      prevHeight = heightCm;
       const z = zScores(s.sex, ageDays, weightKg, heightCm);
       const c = classify(z);
       measurements.push({
