@@ -60,7 +60,7 @@ export function buildSeed(today = new Date()) {
   const measurements: Measurement[] = [];
   SPECS.forEach((s, i) => {
     const id = `c${String(i + 1).padStart(2, "0")}`;
-    const dobDate = new Date(today.getTime() - s.months * 30.4375 * DAY);
+    const dobDate = new Date(today.getTime() - (s.months * 30.4375 + 2) * DAY);
     const dob = todayIso(dobDate);
     children.push({ id, name: s.name, nameLocal: s.nameLocal, parentName: s.parent, sex: s.sex, dob });
 
