@@ -1,0 +1,32 @@
+\documentclass[border=8pt]{standalone}
+\input{preamble}
+% stage{name}{x}{y}{number}{title}{what it does}{example}
+\newcommand{\stage}[7]{%
+  \node[box, minimum width=4.3cm, text width=4.3cm-8pt, minimum height=17mm, anchor=north] (#1) at (#2,#3)
+    {{\scriptsize\color{slate}#4}\\[-1pt]\textbf{#5}\\[1pt]{\scriptsize #6}};
+  \node[ex, text width=4.3cm, anchor=north, below=1.5mm of #1] (#1x) {#7};}
+\begin{document}
+\hyphenpenalty=10000\exhyphenpenalty=10000
+\begin{tikzpicture}
+\stage{a}{0}{0}{1}{Speech to text}{N-best transcripts (Web Speech or Sarvam)}{``riya saha point saha kilo chauhattar centimetre'' + 3 alternatives}
+\stage{b}{4.9}{0}{2}{Normalise \& tokenise}{NFC, nukta, Devanagari digits, split ``9.2kg''}{riya $|$ saha $|$ point $|$ saha $|$ kilo $|$ chauhattar $|$ cm}
+\stage{c}{9.8}{0}{3}{Numbers \& units}{880+ mr/hi forms, saade/paune, kilo+gram}{6.6 kg $\cdot$ 74 cm}
+\stage{d}{14.7}{0}{4}{Name resolution}{phonetic key vs roster; alternatives tried}{``riya'' $\to$ 2 matches $\to$ asks \emph{Pawar or Shinde?}}
+\stage{e}{19.6}{0}{5}{Plausibility}{vs last month + WHO velocity}{7.2 $\to$ 6.6 kg: $-600$ g, plausible\\ (28 cm would $\to$ ``did you mean 82?'')}
+
+\stage{f}{19.6}{-4.6}{6}{Read-back \& confirm}{states the change; only ``ho/haan'' saves}{``Riya Pawar. 6.6 kilo, 74 cm. Down 600 grams. Correct?''}
+\stage{g}{14.7}{-4.6}{7}{WHO z-scores}{LMS method, restricted beyond $\pm$3 SD}{WAZ $-3.0$ $\cdot$ HAZ $-0.9$ $\cdot$ WHZ $-3.54$}
+\stage{h}{9.8}{-4.6}{8}{Classify}{India 2023 protocol: WHZ, MUAC, oedema}{\textcolor{chilli}{\textbf{SAM}} (WHZ $< -3$)}
+\stage{i}{4.9}{-4.6}{9}{Act}{spoken alert, referral, family message}{``Riya lost 600 grams. Severe acute malnutrition. Added to referral list.''}
+\stage{j}{0}{-4.6}{10}{Store \& sync}{IndexedDB + transcript, clip, timing}{queued offline $\to$ CSV / sync; feeds honesty score \& watch list}
+
+\foreach \x/\y in {a/b,b/c,c/d,d/e} \draw[flow] (\x.east) -- (\y.west);
+\foreach \x/\y in {f/g,g/h,h/i,i/j} \draw[flow] (\x.west) -- (\y.east);
+\draw[flow] (e.south) ++(0,-1.25) -- ([yshift=0mm]f.north);
+% reverse arrows for the bottom row (right to left)
+\begin{scope}[on background layer]
+  \fill[turw, rounded corners=6pt] ($(e.north west)+(-0.15,0.15)$) rectangle ($(fx.south east)+(0.15,-0.1)$);
+\end{scope}
+\node[font=\scriptsize\bfseries, text=tur, anchor=south west] at ($(e.north west)+(-0.1,0.2)$) {safety layer: nothing saved until she confirms};
+\end{tikzpicture}
+\end{document}

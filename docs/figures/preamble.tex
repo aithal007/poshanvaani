@@ -1,0 +1,26 @@
+\usepackage[scaled=0.95]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc,shapes.geometric,shapes.misc}
+\definecolor{ink}{HTML}{16264A}
+\definecolor{inksoft}{HTML}{3B4C70}
+\definecolor{slate}{HTML}{5D6B7E}
+\definecolor{paper}{HTML}{EEF3F1}
+\definecolor{rule}{HTML}{C9D6D1}
+\definecolor{leaf}{HTML}{1F8A5B}
+\definecolor{leafw}{HTML}{E3F3EA}
+\definecolor{tur}{HTML}{D98F1C}
+\definecolor{turw}{HTML}{FCF0D9}
+\definecolor{chilli}{HTML}{C9342B}
+\definecolor{chilliw}{HTML}{FBE5E2}
+\tikzset{
+  >={Stealth[length=2.2mm]},
+  box/.style={draw=ink, line width=0.6pt, rounded corners=2pt, fill=white, align=center, inner sep=4pt, font=\small},
+  mod/.style={box, minimum width=3.1cm, minimum height=8mm},
+  lane/.style={draw=rule, line width=0.8pt, rounded corners=6pt, fill=paper, inner sep=8pt},
+  lanetitle/.style={font=\small\bfseries, text=ink, anchor=north west},
+  flow/.style={->, line width=0.8pt, draw=ink},
+  opt/.style={->, line width=0.8pt, draw=slate, dashed},
+  lab/.style={font=\scriptsize, text=slate, fill=white, inner sep=1.5pt},
+  ex/.style={font=\scriptsize\itshape, text=inksoft, align=center},
+}

@@ -124,3 +124,13 @@ describe("voice flow", () => {
     expect(t.draft.forced).toBe(true);
   });
 });
+
+describe("MUAC and oedema in the flow", () => {
+  it("reads back MUAC and oedema", () => {
+    const t = engine.handle("Gauri More, 7.3 kilo, 68 centimetre, muac 11.2, paayala sooj aahe");
+    expect(t.phase).toBe("confirm");
+    expect(t.say).toContain("MUAC 11.2");
+    expect(t.say).toContain("oedema");
+    expect(t.draft.oedema).toBe(true);
+  });
+});

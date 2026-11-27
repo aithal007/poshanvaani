@@ -22,6 +22,7 @@ export interface Measurement {
   weightKg: number;
   heightCm: number;
   muacCm?: number;
+  oedema?: boolean;
   waz: number | null;
   haz: number | null;
   whz: number | null;

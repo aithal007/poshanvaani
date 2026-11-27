@@ -130,10 +130,10 @@ export interface Classification {
 const grade = (z: number | null) =>
   z === null ? "normal" : z < -3 ? "severe" : z < -2 ? "moderate" : "normal";
 
-export function classify(z: ZScores, muacCm?: number | null, ageDays?: number): Classification {
+export function classify(z: ZScores, muacCm?: number | null, ageDays?: number, oedema?: boolean): Classification {
   let status: Status = "normal";
   const muacApplies = muacCm != null && (ageDays === undefined || ageDays >= 183);
-  if ((z.whz !== null && z.whz < -3) || (muacApplies && muacCm! < 11.5)) status = "sam";
+  if (oedema || (z.whz !== null && z.whz < -3) || (muacApplies && muacCm! < 11.5)) status = "sam";
   else if ((z.whz !== null && z.whz < -2) || (muacApplies && muacCm! < 12.5)) status = "mam";
 
   const flags: string[] = [];

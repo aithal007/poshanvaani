@@ -23,6 +23,7 @@ export interface Draft {
   weightKg?: number;
   heightCm?: number;
   muacCm?: number;
+  oedema?: boolean;
   transcripts: string[];
   corrected: boolean;
   forced: boolean;
@@ -158,6 +159,7 @@ export class Engine {
       weightKg: m.weightKg ?? keepNumbers?.weightKg,
       heightCm: m.heightCm ?? keepNumbers?.heightCm,
       muacCm: m.muacCm ?? keepNumbers?.muacCm,
+      oedema: m.oedema ?? keepNumbers?.oedema,
     };
 
     if (result.kind === "none") {
@@ -315,7 +317,7 @@ export class Engine {
     const d = this.draft;
     const prev = this.deps.previous(d.child!.id);
     const delta = prev && d.weightKg !== undefined ? Math.round((d.weightKg - prev.weightKg) * 1000) : null;
-    return this.deps.phrases.readback(this.displayName(d.child!), d.weightKg, d.heightCm, delta);
+    return this.deps.phrases.readback(this.displayName(d.child!), d.weightKg, d.heightCm, delta, d.muacCm, d.oedema);
   }
 
   private plausibilityQuestion(issue: Issue): string {
@@ -356,5 +358,6 @@ export class Engine {
     if (m.weightKg !== undefined && (overwrite || d.weightKg === undefined)) d.weightKg = m.weightKg;
     if (m.heightCm !== undefined && (overwrite || d.heightCm === undefined)) d.heightCm = m.heightCm;
     if (m.muacCm !== undefined) d.muacCm = m.muacCm;
+    if (m.oedema !== undefined) d.oedema = m.oedema;
   }
 }

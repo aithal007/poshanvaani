@@ -10,7 +10,7 @@ const fmt = (n: number) => String(Math.round(n * 100) / 100);
 
 export interface Phrases {
   ready: string;
-  readback: (name: string, w?: number, h?: number, deltaG?: number | null) => string;
+  readback: (name: string, w?: number, h?: number, deltaG?: number | null, muac?: number, oedema?: boolean) => string;
   saved: string;
   next: string;
   whichChild: (a: string, b: string) => string;
@@ -33,8 +33,8 @@ export interface Phrases {
 
 const mr: Phrases = {
   ready: "तयार. मुलाचे नाव, वजन आणि उंची सांगा.",
-  readback: (n, w, h, d) =>
-    `${n}. ${w !== undefined ? `वजन ${fmt(w)} किलो` : ""}${h !== undefined ? `, उंची ${fmt(h)} सेंटीमीटर` : ""}.${d ? ` ${Math.abs(d)} ग्रॅम ${d > 0 ? "वाढ" : "घट"}.` : ""} बरोबर?`,
+  readback: (n, w, h, d, muac, oe) =>
+    `${n}. ${w !== undefined ? `वजन ${fmt(w)} किलो` : ""}${h !== undefined ? `, उंची ${fmt(h)} सेंटीमीटर` : ""}${muac ? `, दंडघेर ${fmt(muac)}` : ""}${oe ? ", दोन्ही पायांवर सूज" : ""}.${d ? ` ${Math.abs(d)} ग्रॅम ${d > 0 ? "वाढ" : "घट"}.` : ""} बरोबर?`,
   saved: "जतन केले.",
   next: "पुढचे मूल.",
   whichChild: (a, b) => `${a} की ${b}?`,
@@ -76,8 +76,8 @@ const mr: Phrases = {
 
 const hi: Phrases = {
   ready: "तैयार. बच्चे का नाम, वजन और लंबाई बोलिए.",
-  readback: (n, w, h, d) =>
-    `${n}. ${w !== undefined ? `वजन ${fmt(w)} किलो` : ""}${h !== undefined ? `, लंबाई ${fmt(h)} सेंटीमीटर` : ""}.${d ? ` ${Math.abs(d)} ग्राम ${d > 0 ? "बढ़ा" : "घटा"}.` : ""} सही है?`,
+  readback: (n, w, h, d, muac, oe) =>
+    `${n}. ${w !== undefined ? `वजन ${fmt(w)} किलो` : ""}${h !== undefined ? `, लंबाई ${fmt(h)} सेंटीमीटर` : ""}${muac ? `, MUAC ${fmt(muac)}` : ""}${oe ? ", दोनों पैरों में सूजन" : ""}.${d ? ` ${Math.abs(d)} ग्राम ${d > 0 ? "बढ़ा" : "घटा"}.` : ""} सही है?`,
   saved: "सेव हो गया.",
   next: "अगला बच्चा.",
   whichChild: (a, b) => `${a} या ${b}?`,
@@ -119,8 +119,8 @@ const hi: Phrases = {
 
 const en: Phrases = {
   ready: "Ready. Say the child's name, weight and height.",
-  readback: (n, w, h, d) =>
-    `${n}. ${w !== undefined ? `${fmt(w)} kilo` : ""}${h !== undefined ? `, ${fmt(h)} centimetre` : ""}.${d ? ` ${d > 0 ? "Up" : "Down"} ${Math.abs(d)} grams.` : ""} Correct?`,
+  readback: (n, w, h, d, muac, oe) =>
+    `${n}. ${w !== undefined ? `${fmt(w)} kilo` : ""}${h !== undefined ? `, ${fmt(h)} centimetre` : ""}${muac ? `, MUAC ${fmt(muac)}` : ""}${oe ? ", oedema on both feet" : ""}.${d ? ` ${d > 0 ? "Up" : "Down"} ${Math.abs(d)} grams.` : ""} Correct?`,
   saved: "Saved.",
   next: "Next child.",
   whichChild: (a, b) => `${a} or ${b}?`,

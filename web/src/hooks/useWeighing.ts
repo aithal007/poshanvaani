@@ -109,7 +109,7 @@ export function useWeighing(lang: Lang, engineChoice: "webspeech" | "sarvam") {
       const child = d.child;
       const days = ageInDays(child.dob);
       const z = zScores(child.sex, days, d.weightKg, d.heightCm);
-      const c = classify(z, d.muacCm, days);
+      const c = classify(z, d.muacCm, days, d.oedema);
       const prev = await lastMeasurement(child.id, today);
       const prevReading = prev ? { weightKg: prev.weightKg, heightCm: prev.heightCm, date: prev.date } : undefined;
       const m: Measurement = {
@@ -119,6 +119,7 @@ export function useWeighing(lang: Lang, engineChoice: "webspeech" | "sarvam") {
         weightKg: d.weightKg,
         heightCm: d.heightCm,
         muacCm: d.muacCm,
+        oedema: d.oedema,
         waz: z.waz,
         haz: z.haz,
         whz: z.whz,
@@ -145,7 +146,7 @@ export function useWeighing(lang: Lang, engineChoice: "webspeech" | "sarvam") {
             measurementId: m.id,
             createdAt: Date.now(),
             status: c.status,
-            reason: `WHZ ${z.whz ?? "–"}${d.muacCm ? `, MUAC ${d.muacCm} cm` : ""}`,
+            reason: `WHZ ${z.whz ?? "–"}${d.muacCm ? `, MUAC ${d.muacCm} cm` : ""}${d.oedema ? ", bilateral oedema" : ""}`,
             shared: false,
           });
         }

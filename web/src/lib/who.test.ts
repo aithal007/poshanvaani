@@ -58,3 +58,9 @@ describe("WHO LMS z-scores", () => {
     expect(classify(z).flags).toContain("haz");
   });
 });
+
+describe("oedema", () => {
+  it("is SAM regardless of z-scores", () => {
+    expect(classify({ waz: 0, haz: 0, whz: 0 }, null, 400, true).status).toBe("sam");
+  });
+});

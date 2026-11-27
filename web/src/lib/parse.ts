@@ -230,6 +230,19 @@ export interface Measurement {
   weightKg?: number;
   heightCm?: number;
   muacCm?: number;
+  oedema?: boolean; // bilateral pitting oedema reported by the worker
+}
+
+const OEDEMA = toSet(["oedema", "edema", "सूज", "soojan", "sujan", "sooj", "suj", "सूजन", "puffy", "swelling"]);
+const NEGATE = toSet(["nahi", "नाही", "नहीं", "no", "नही", "nai"]);
+
+/** "paayala sooj aahe" -> true, "sooj nahi" -> false, no mention -> undefined. */
+export function detectOedema(text: string): boolean | undefined {
+  const words = normalize(text).split(" ");
+  const i = words.findIndex((w) => OEDEMA.has(w));
+  if (i < 0) return undefined;
+  const near = words.slice(i + 1, i + 4);
+  return !near.some((w) => NEGATE.has(w));
 }
 
 /** Decide which quantity is weight, height or MUAC. */
@@ -289,10 +302,13 @@ export function parseUtterance(text: string): ParsedUtterance {
   const nameWords = (firstNumberAt >= 0 ? words.slice(0, firstNumberAt) : words).filter(
     (w) => !FILLER.has(w) && !YES.has(w) && !NO.has(w)
   );
+  const measurement = assignFields(qty);
+  const oedema = detectOedema(text);
+  if (oedema !== undefined) measurement.oedema = oedema;
   return {
     intent: detectIntent(text),
-    nameText: nameWords.join(" "),
-    measurement: assignFields(qty),
+    nameText: nameWords.filter((w) => !OEDEMA.has(w)).join(" "),
+    measurement,
     raw: text,
   };
 }

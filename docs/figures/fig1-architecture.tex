@@ -1,0 +1,83 @@
+\documentclass[border=8pt]{standalone}
+\input{preamble}
+% m{name}{x}{y}{width}{title}{subtitle}
+\newcommand{\m}[6]{\node[box, minimum width=#4cm, text width=#4cm-8pt, minimum height=9mm] (#1) at (#2,#3) {\textbf{#5}\\[-1pt]{\scriptsize\color{inksoft}#6}};}
+\begin{document}
+\begin{tikzpicture}
+% ---------------- lanes
+\begin{scope}[on background layer]
+  \draw[lane] (-0.2,-0.2) rectangle (12.2,11.2);
+  \draw[lane] (13.2,3.9) rectangle (18.8,11.2);
+  \draw[lane, fill=white] (19.8,1.9) rectangle (25.6,11.2);
+  \draw[draw=rule, dashed, line width=0.8pt, rounded corners=4pt, fill=white] (0.3,2.0) rectangle (11.7,6.35);
+\end{scope}
+\node[lanetitle] at (0,11.1) {Anganwadi worker's phone \,(Chrome PWA, offline-first)};
+\node[lanetitle] at (13.4,11.1) {Server \,(\texttt{docker compose up})};
+\node[lanetitle] at (20.0,11.1) {Outside services};
+\node[font=\scriptsize\itshape, text=slate, anchor=south east] at (11.65,2.05) {deterministic code, 95 unit tests, no LLM};
+\node[font=\scriptsize, text=slate, anchor=north] at (16,3.85) {Node.js, zero dependencies, port 8080};
+
+% ---------------- phone
+\node[box, fill=ink, text=white, minimum width=11.4cm, minimum height=9mm] (ui) at (6,10.2)
+  {\textbf{PWA interface}\quad{\scriptsize read-back card $\cdot$ growth chart $\cdot$ watch list $\cdot$ honesty score $\cdot$ keypad fallback}};
+\m{stt}{3.05}{8.75}{5.5}{Speech-to-text provider}{Web Speech (free) $|$ Sarvam Saaras $|$ keypad}
+\m{tts}{8.95}{8.75}{5.5}{Text-to-speech provider}{browser voice $|$ Sarvam Bulbul $|$ on-screen text}
+\node[box, fill=turw, draw=tur, minimum width=11.4cm, minimum height=9mm] (eng) at (6,7.3)
+  {\textbf{Conversation engine} (state machine)\\[-1pt]{\scriptsize\color{inksoft}listen $\to$ which child? $\to$ missing field $\to$ plausibility $\to$ read-back $\to$ ``ho'' saves}};
+\m{parse}{3.05}{5.65}{5.3}{Utterance parser}{mr / hi / en number lexicon, units}
+\m{names}{8.95}{5.65}{5.3}{Name matcher}{phonetic keys, Devanagari $\leftrightarrow$ Latin}
+\m{plaus}{3.05}{4.55}{5.3}{Plausibility check}{WHO velocity, digit swap, lost decimal}
+\m{who}{8.95}{4.55}{5.3}{WHO LMS z-scores}{WAZ / HAZ / WHZ, MUAC $\to$ SAM / MAM}
+\m{watch}{3.05}{3.45}{5.3}{Faltering watch list}{2-month trajectory rules}
+\m{hon}{8.95}{3.45}{5.3}{Data honesty score}{digit preference, copied values}
+\node[box, fill=leafw, draw=leaf, minimum width=11.4cm, minimum height=9mm] (db) at (6,0.75)
+  {\textbf{IndexedDB}\quad{\scriptsize children $\cdot$ readings + transcript, audio clip, provenance, timing $\cdot$ referrals $\cdot$ sync queue}};
+
+% ---------------- server
+\m{static}{16}{10.1}{5}{Static app}{PWA + service worker (offline cache)}
+\node[box, minimum width=5cm, minimum height=7mm, font=\small\ttfamily] (cfg) at (16,8.95) {GET /api/config};
+\m{sttp}{16}{7.75}{5}{\texttt{POST /api/stt}}{proxy; 501 ``key not set'' without key}
+\node[box, minimum width=5cm, minimum height=7mm, font=\small\ttfamily] (ttsp) at (16,6.55) {POST /api/tts};
+\node[box, minimum width=5cm, minimum height=7mm, font=\small\ttfamily] (sync) at (16,5.2) {POST /api/sync};
+
+% ---------------- external
+\m{google}{22.7}{10.1}{5.3}{Google speech service}{used by Chrome Web Speech, free}
+\node[box, dashed, minimum width=5.3cm, text width=5.3cm-8pt, minimum height=9mm] (sarvam) at (22.7,8.2)
+  {\textbf{Sarvam AI} (optional)\\[-1pt]{\scriptsize\color{inksoft}Saaras STT, Bulbul TTS; \texttt{SARVAM\_API\_KEY}}};
+\m{wa}{22.7}{6.4}{5.3}{WhatsApp}{referral slip, family message}
+\m{pt}{22.7}{4.6}{5.3}{Poshan Tracker}{CSV in its entry shape}
+\m{sup}{22.7}{2.85}{5.3}{Supervisor / PHC}{honesty score, watch list, referrals}
+
+% ---------------- worker
+\node[circle, draw=ink, line width=0.8pt, fill=white, minimum size=15mm, align=center, font=\small\bfseries] (aww) at (-2.4,8.75) {AWW};
+\node[font=\scriptsize, text=slate, align=center, below=1mm of aww] {hands on the child};
+\draw[flow] (aww.east) -- node[lab, above] {speaks} (stt.west);
+\draw[flow] (tts.north) -- (8.95,9.38) -- node[lab, pos=0.5, above, yshift=-1pt] {hears read-back, alerts} (-2.4,9.38) -- (aww.north);
+
+% ---------------- phone internals
+\draw[flow] (stt.south) -- (stt.south |- eng.north);
+\draw[flow] (tts.south |- eng.north) -- (tts.south);
+\draw[flow] (eng.south) -- (6,6.35);
+\draw[flow] (6,2.0) -- node[lab, right] {confirmed readings only} (db.north);
+
+% ---------------- network
+\draw[flow, draw=slate] (static.west) -- node[lab, above] {loads once} (ui.east);
+\draw[opt] ([yshift=-2mm]stt.east) -- ++(0.25,0) |- (sttp.west);
+\node[lab] at (12.75,7.45) {audio};
+\draw[opt] (sttp.east) -- (sarvam.west);
+\draw[opt] (ttsp.east) -- (sarvam.west);
+\draw[opt] ([yshift=-2mm]tts.east) -- ++(0.15,0) |- (ttsp.west);
+\draw[flow, draw=slate] (google.west) -- (19.5,10.1) |- (12.55,9.58) -- node[lab, pos=0.12, above, yshift=-1pt] {transcript (Chrome)} (4.6,9.58) -- (4.6,9.2);
+\draw[flow] (db.east) -- node[lab, pos=0.5, above] {queued; synced when online} (16,0.75) -- (16,4.85);
+\draw[flow, draw=slate] (sync.east) -- (pt.west);
+\draw[flow, draw=slate] (sync.east) -- (sup.west);
+\draw[flow, draw=slate] (11.7,2.45) -- node[lab, pos=0.5, above] {referral slip, family message (share)} (19.3,2.45) |- (wa.west);
+
+% ---------------- legend
+\begin{scope}[shift={(20.0,0.0)}]
+  \draw[flow] (0,0.9) -- (0.8,0.9); \node[font=\scriptsize, anchor=west] at (0.9,0.9) {required, works without any key};
+  \draw[opt] (0,0.45) -- (0.8,0.45); \node[font=\scriptsize, anchor=west] at (0.9,0.45) {optional (needs \texttt{SARVAM\_API\_KEY})};
+  \draw[flow, draw=slate] (0,0) -- (0.8,0); \node[font=\scriptsize, anchor=west] at (0.9,0) {third-party channel};
+\end{scope}
+\end{tikzpicture}
+\end{document}

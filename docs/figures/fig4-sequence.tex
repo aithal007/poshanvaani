@@ -1,0 +1,42 @@
+\documentclass[border=8pt]{standalone}
+\input{preamble}
+\tikzset{
+  actor/.style={draw=ink, line width=0.9pt, rounded corners=4pt, fill=white, minimum width=3.6cm, minimum height=12mm, align=center, font=\small\bfseries},
+  life/.style={draw=rule, line width=1.2pt, dashed},
+  msg/.style={->, line width=0.8pt, draw=ink},
+  ret/.style={->, line width=0.8pt, draw=leaf},
+  later/.style={->, line width=0.8pt, draw=slate, dashed},
+  m/.style={font=\scriptsize, fill=white, inner sep=1.5pt, align=center},
+}
+\begin{document}
+\begin{tikzpicture}
+\def\A{0} \def\P{6.2} \def\M{12.4} \def\S{18.6} \def\bot{-14.4}
+\node[actor, fill=ink, text=white] (a) at (\A,0) {Anganwadi worker\\{\scriptsize\mdseries hands on the child}};
+\node[actor, fill=turw, draw=tur] (p) at (\P,0) {PoshanVaani\\{\scriptsize\mdseries on her phone, offline}};
+\node[actor] (m) at (\M,0) {Mother / family\\{\scriptsize\mdseries WhatsApp or at the centre}};
+\node[actor] (s) at (\S,0) {Supervisor / PHC\\{\scriptsize\mdseries sector meeting}};
+\foreach \x in {\A,\P,\M,\S} \draw[life] (\x,-0.7) -- (\x,\bot);
+
+\newcommand{\msgAB}[5]{\draw[#4] (#1,#3) -- node[m, above] {#5} (#2,#3);}
+\msgAB{\A}{\P}{-1.4}{msg}{\textbf{speaks}: ``Riya, saha point saha kilo, chauhattar centimetre''}
+\msgAB{\P}{\A}{-2.3}{ret}{``Riya Pawar or Riya Shinde?''}
+\msgAB{\A}{\P}{-3.2}{msg}{``Pawar''}
+\msgAB{\P}{\A}{-4.1}{ret}{``Riya Pawar. 6.6 kilo, 74 cm. Down 600 grams. Correct?''}
+\msgAB{\A}{\P}{-5.0}{msg}{``haan''}
+\node[draw=tur, fill=turw, rounded corners=3pt, font=\scriptsize, align=left, anchor=west] at (\P+0.25,-6.0) {WHO LMS: WHZ $-3.54$ $\Rightarrow$ \textbf{SAM}; plausible vs last month;\\saved to IndexedDB with transcript, clip, timing (works offline)};
+\msgAB{\P}{\A}{-7.1}{ret}{spoken: ``Riya lost 600 grams. Severe acute malnutrition. Added to referral list.''}
+\msgAB{\P}{\M}{-8.1}{msg}{family message in Marathi: weight, change,\\one action, ``come on Thursday''}
+\draw[msg] (\P,-9.3) -- node[m, above, pos=0.62] {referral slip: WHZ, WAZ, action, NRC if needed} (\S,-9.3);
+\draw[later] (\P,-10.5) -- node[m, above, pos=0.62] {when online: sync $\to$ honesty score, watch list, CSV for Poshan Tracker} (\S,-10.5);
+\msgAB{\A}{\P}{-11.6}{msg}{``kon baaki aahe?''}
+\msgAB{\P}{\A}{-12.4}{ret}{``16 left: Gauri, Sai, Soham ...''}
+\draw[later] (\M,-13.5) -- node[m, above] {Round 3: mother asks by voice note, gets her child's status} (\P,-13.5);
+
+% legend
+\begin{scope}[shift={(0,-15.3)}]
+  \draw[msg] (0,0) -- (0.9,0); \node[font=\scriptsize, anchor=west] at (1,0) {spoken / sent};
+  \draw[ret] (3.6,0) -- (4.5,0); \node[font=\scriptsize, anchor=west] at (4.6,0) {spoken back by the app};
+  \draw[later] (8.6,0) -- (9.5,0); \node[font=\scriptsize, anchor=west] at (9.6,0) {later / when online / next round};
+\end{scope}
+\end{tikzpicture}
+\end{document}

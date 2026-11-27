@@ -73,3 +73,21 @@ describe("detectIntent", () => {
   ];
   for (const [text, intent] of cases) it(`${text} -> ${intent}`, () => expect(detectIntent(text)).toBe(intent));
 });
+
+describe("MUAC and oedema", () => {
+  it("reads MUAC by keyword", () => {
+    expect(m("Gauri 7.3 kilo 68 cm muac 11.2").muacCm).toBeCloseTo(11.2, 3);
+  });
+  it("detects bilateral oedema in Marathi, Hindi and English", () => {
+    expect(m("Gauri 7.3 kilo 68 cm, paayala sooj aahe").oedema).toBe(true);
+    expect(m("गौरी 7.3 किलो 68 सेमी पायावर सूज").oedema).toBe(true);
+    expect(m("Gauri 7.3 kilo 68 cm oedema").oedema).toBe(true);
+  });
+  it("respects a negation", () => {
+    expect(m("Gauri 7.3 kilo 68 cm sooj nahi").oedema).toBe(false);
+    expect(m("Gauri 7.3 kilo 68 cm").oedema).toBeUndefined();
+  });
+  it("does not treat the oedema word as part of the name", () => {
+    expect(parseUtterance("Gauri sooj 7.3 kilo 68 cm").nameText).toBe("gauri");
+  });
+});

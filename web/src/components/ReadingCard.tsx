@@ -77,6 +77,12 @@ export function ReadingCard({
               <Value value={draft.weightKg} unit={t.ui.kg} flagged={issue?.field === "weightKg"} previous={issue?.field === "weightKg" ? issue.previous : undefined} />
               <Value value={draft.heightCm} unit={t.ui.cm} flagged={issue?.field === "heightCm"} previous={issue?.field === "heightCm" ? issue.previous : undefined} />
             </div>
+            {(draft.muacCm !== undefined || draft.oedema) && (
+              <div className="mt-2 flex gap-2 text-base font-semibold">
+                {draft.muacCm !== undefined && <span className={`rounded-xl px-3 py-1 ${draft.muacCm < 11.5 ? "bg-chilli-wash text-chilli" : draft.muacCm < 12.5 ? "bg-turmeric-wash text-turmeric" : "bg-paper"}`}>MUAC {draft.muacCm} cm</span>}
+                {draft.oedema && <span className="rounded-xl px-3 py-1 bg-chilli-wash text-chilli">{lang === "en" ? "Bilateral oedema" : lang === "hi" ? "दोनों पैरों में सूजन" : "दोन्ही पायांवर सूज"}</span>}
+              </div>
+            )}
             {issue?.suggestion !== undefined && (
               <p className="mt-3 text-lg font-semibold text-turmeric">
                 {t.ui.suggestion} {issue.suggestion} {issue.field === "weightKg" ? t.ui.kg : t.ui.cm}?
