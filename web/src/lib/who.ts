@@ -111,6 +111,13 @@ export function weightForAgeBands(sex: Sex, ageDays: number) {
   return { m3: sd(-3), m2: sd(-2), median: m, p2: sd(2), p3: sd(3) };
 }
 
+/** Inverse LMS: the measurement at a given z-score (for bands and demo data). */
+export function valueAtZ(indicator: "wfa" | "lhfa", sex: Sex, ageDays: number, z: number): number {
+  const age = Math.min(Math.max(Math.round(ageDays), 0), MAX_AGE_DAYS);
+  const [l, m, s] = table[indicator][sexKey(sex)][age];
+  return l === 0 ? m * Math.exp(s * z) : m * Math.pow(1 + l * s * z, 1 / l);
+}
+
 export type Status = "normal" | "mam" | "sam";
 
 export interface Classification {
