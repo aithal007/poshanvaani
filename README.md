@@ -72,7 +72,7 @@ Marathi script works too: `रिया पवार सहा पॉइंट �
 | Matches child names across scripts and spellings (रिया पवार = Riya Pawar = Reeya Powar), and asks "which child?" when names collide | [`web/src/lib/names.ts`](web/src/lib/names.ts) |
 | Conversation engine with read-back confirmation, "nahi, 9.4 kilo" field correction, missing-field prompts, force-save after double confirmation, and a keypad after repeated misses | [`web/src/lib/engine.ts`](web/src/lib/engine.ts) |
 | **Plausibility check before saving**, against last month and WHO velocity limits. Suggests the intended value for digit swaps, a lost decimal point, or grams said as kilos | [`web/src/lib/plausibility.ts`](web/src/lib/plausibility.ts) |
-| WHO 2006 Child Growth Standards z-scores (WAZ, HAZ, WHZ) using the LMS method with WHO's restricted adjustment. SAM/MAM classification per India's 2023 MoWCD/MoHFW protocol (WHZ and MUAC) | [`web/src/lib/who.ts`](web/src/lib/who.ts), tables built by [`scripts/build-who-data.mjs`](scripts/build-who-data.mjs) |
+| WHO 2006 Child Growth Standards z-scores (WAZ, HAZ, WHZ) using the LMS method with WHO's restricted adjustment. SAM/MAM classification per India's 2023 MoWCD/MoHFW protocol (WHZ, MUAC and bilateral oedema, all captured by voice) | [`web/src/lib/who.ts`](web/src/lib/who.ts), tables built by [`scripts/build-who-data.mjs`](scripts/build-who-data.mjs) |
 | Speech providers: Web Speech API using N-best alternatives against the roster, with a 3-second audio clip saved per reading for audit. Sarvam STT/TTS through a server proxy, so the key never reaches the browser | [`web/src/lib/speech.ts`](web/src/lib/speech.ts), [`server/server.mjs`](server/server.mjs) |
 | Offline-first storage (IndexedDB). Each reading keeps its transcript, corrected and forced flags, and engine. Undo voids the entry and never deletes it. Sync queue | [`web/src/lib/db.ts`](web/src/lib/db.ts) |
 | Poshan Tracker-shaped CSV export, and a referral slip shared through a WhatsApp link | [`web/src/lib/export.ts`](web/src/lib/export.ts) |
@@ -87,6 +87,10 @@ Marathi script works too: `रिया पवार सहा पॉइंट �
 **Design rule: the model transcribes, code decides.** Speech-to-text only produces text. Every number, match, check and classification is deterministic, tested code. No LLM is needed, and none is used.
 
 ## Architecture
+
+Paper-style figures (TikZ sources in [`docs/figures/`](docs/figures), built with `python docs/figures/build.py`): [system architecture](docs/deck/fig/fig1-architecture.svg) · [utterance pipeline](docs/deck/fig/fig2-pipeline.svg) · [conversation state machine](docs/deck/fig/fig3-states.svg) · [who hears what](docs/deck/fig/fig4-sequence.svg).
+
+![System architecture](docs/deck/fig/fig1-architecture.svg)
 
 ```
  worker speaks ──▶ STT provider ──▶ transcript (+ alternatives)
@@ -127,7 +131,7 @@ The server (`server/server.mjs`, with no npm dependencies) serves the built app 
 ## Tests
 
 ```bash
-cd web && npm install && npm test      # 95 unit and flow tests
+cd web && npm install && npm test      # 101 unit and flow tests
 python e2e/smoke.py http://localhost:8080   # Playwright run of the full demo flow + screenshots
 ```
 

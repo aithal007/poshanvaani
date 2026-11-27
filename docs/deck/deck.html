@@ -32,12 +32,17 @@
   table { border-collapse: collapse; width: 100%; font-size: 17px; }
   th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.35; }
   th { font-size: 14px; color: var(--slate); font-weight: 600; }
+  .tight td, .tight th { padding: 5px 8px; }
   .phone { height: 520px; border-radius: 26px; border: 6px solid var(--ink); }
   .steps { counter-reset: s; list-style: none; padding: 0; }
   .steps li { counter-increment: s; position: relative; padding-left: 46px; margin: 10px 0; }
   .steps li::before { content: counter(s); position: absolute; left: 0; top: 2px; width: 32px; height: 32px; border-radius: 50%; background: var(--ink); color: #fff; font-weight: 800; font-size: 17px; display: grid; place-items: center; }
   .band { display: flex; height: 14px; border-radius: 999px; overflow: hidden; margin: 14px 0 6px; }
   .dense li { font-size: 18.5px; line-height: 1.36; }
+  .figwrap { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 18px; padding: 14px; }
+  .figwrap img { width: 100%; height: 100%; object-fit: contain; }
+  .cap { font-size: 16.5px; line-height: 1.42; margin-top: 12px; color: var(--ink); }
+  .est { font-size: 12px; font-weight: 800; color: var(--tur); background: var(--turw); border-radius: 6px; padding: 1px 6px; vertical-align: middle; }
   .src { font-size: 13px; color: var(--slate); margin-top: auto; padding-top: 10px; line-height: 1.35; }
 </style>
 </head>
@@ -84,7 +89,7 @@
 <section class="slide">
   <h1>Who it is for, and how many</h1>
   <div class="cols c3">
-    <div class="card"><div class="big">13.3 lakh</div><p class="muted" style="margin-top:8px">anganwadi workers: the users. Mostly women aged 25–55, school-educated, on low-cost Android phones, speaking Marathi, Hindi and 20 other languages mixed with English numbers.</p></div>
+    <div class="card"><div class="big">13.1 lakh</div><p class="muted" style="margin-top:8px">anganwadi workers in position: the users. Mostly women aged 25–55, school-educated, on low-cost Android phones, speaking Marathi, Hindi and 20 other languages mixed with English numbers.</p></div>
     <div class="card"><div class="big">7.7 crore</div><p class="muted" style="margin-top:8px">children tracked every month in Poshan Tracker across 14 lakh anganwadi centres. 6.3 crore of them get monthly growth monitoring: every one is a reading typed by hand today.</p></div>
     <div class="card"><div class="big">1 user</div><p class="muted" style="margin-top:8px">to start: Sunita, a worker in Nashik district, Maharashtra, with 24 children. The prototype ships with her centre's demo roster: two children named Riya, one child sliding into severe malnutrition, six already weighed today.</p></div>
   </div>
@@ -92,6 +97,34 @@
     <p><b>Also benefits:</b> supervisors and PHC medical officers, who get referral lists they can trust; mothers, whose child is referred the same day instead of next month; and state nutrition programmes, whose dashboards depend on honest data.</p>
   </div>
   <p class="src">Sources: PIB Poshan Tracker factsheet (July 2026); anganwadi worker count as of 31 July 2026 (Organiser, Oct 2026).</p>
+</section>
+
+<!-- market -->
+<section class="slide">
+  <h1>Addressable market</h1>
+  <div class="cols c3" style="gap:18px; flex:none">
+    <div class="card"><span class="tag ok">Users (verified)</span>
+      <ul style="margin-top:8px">
+        <li style="font-size:17px"><b>14 lakh</b> anganwadi centres; <b>13.1 lakh</b> workers in position (14 lakh sanctioned, 92,121 vacant)</li>
+        <li style="font-size:17px"><b>41,000</b> supervisors and <b>5,200</b> CDPOs: the buyer's field staff</li>
+        <li style="font-size:17px"><b>10.3 lakh</b> ASHAs (next segment)</li>
+        <li style="font-size:17px"><b>8.8 crore</b> children 0-6 enrolled; <b>6.3 crore</b> growth-monitored monthly</li>
+      </ul></div>
+    <div class="card"><span class="tag mam">Market size</span> <span class="est">estimate</span>
+      <ul style="margin-top:8px">
+        <li style="font-size:17px"><b>TAM &#8377;158-316 cr/yr:</b> 26 lakh Indian frontline workers (AWW, ASHA, ANM, supervisors) &times; &#8377;50-100 per month. More than 5M community health workers worldwide, 1.06M in Africa.</li>
+        <li style="font-size:17px"><b>SAM &#8377;42-84 cr/yr:</b> about 7 lakh AWWs in Hindi and Marathi states.</li>
+        <li style="font-size:17px"><b>SOM &#8377;9-18 cr ARR in 3 years:</b> Maharashtra and MP, 1-2 lakh AWWs.</li>
+      </ul></div>
+    <div class="card"><span class="tag sam">Why a state can pay</span>
+      <ul style="margin-top:8px">
+        <li style="font-size:17px">Saksham Anganwadi &amp; Poshan 2.0 budget: <b>&#8377;21,960 cr</b> (FY25-26 BE). Full AWW rollout at &#8377;1,200/yr is about <b>0.7%</b> of it.</li>
+        <li style="font-size:17px">States already pay <b>&#8377;2,000/yr per AWW</b> for mobile data, plus a &#8377;500/month performance incentive.</li>
+        <li style="font-size:17px">Comparable: CommCare charges $2 (about &#8377;170) per user per month.</li>
+      </ul></div>
+  </div>
+  <div class="card" style="margin-top:14px"><p style="font-size:18px"><b>Value created</b> <span class="est">estimate</span>: at about &#8377;67 per hour of worker time (&#8377;10,000/month honorarium), saving 10-20 hours of data work a month is worth <b>&#8377;1,050-2,100 cr/yr</b> across all AWWs. <b>Impact base:</b> NFHS-6 rates on 6.3 crore monitored children imply about 1.2 crore wasted and about 33 lakh severely wasted children. Finding them early is the point.</p></div>
+  <p class="src">Sources: Lok Sabha AU2416 (Aug 2025); Rajya Sabha PQ 267 (Mar 2025); MWCD vacancy letter; PIB (Jan 2025, Jul 2026, Oct 2023); India Budget EB 101 FY25-26; CommCare pricing page; NFHS-6 (2023-24). Price per worker and hours saved are assumptions to be measured in the pilot.</p>
 </section>
 
 <!-- 4 -->
@@ -108,6 +141,18 @@
     </ol>
     <img src="img/mobile-04-sam-alert.png" class="phone" alt="Saved reading: Riya Pawar 6.6 kg 74 cm, severe acute malnutrition, WHZ -3.54, growth chart and WhatsApp referral button" style="justify-self:center" />
   </div>
+</section>
+
+<section class="slide">
+  <h1 style="font-size:36px; margin-bottom:12px">System architecture</h1>
+  <div class="figwrap"><img src="fig/fig1-architecture.svg" alt="Figure 1" /></div>
+  <p class="cap"><b>Figure 1.</b> <b>Every clinical decision runs on the worker's phone; the network is optional.</b> Speech arrives through a provider interface: Chrome Web Speech (free, the default), Sarvam Saaras (optional key) or the keypad. A state-machine engine passes each transcript through deterministic, unit-tested modules: the number parser, the cross-script name matcher, the plausibility check, WHO LMS z-scores, the faltering watch list and the data-honesty score. Confirmed readings are stored in IndexedDB with their transcript, audio clip and timing, then sync when the phone is online. The server is a dependency-free Node process started by <code>docker compose up</code>. Without a key, its Sarvam routes answer "key not set".</p>
+</section>
+
+<section class="slide">
+  <h1 style="font-size:36px; margin-bottom:12px">One spoken sentence, end to end</h1>
+  <div class="figwrap"><img src="fig/fig2-pipeline.svg" alt="Figure 2" /></div>
+  <p class="cap"><b>Figure 2.</b> <b>From "Riya, saha point saha kilo, chauhattar centimetre" to a referral in ten steps.</b> Stages 1-4 turn audio into numbers and a child: N-best transcripts, normalisation of Devanagari and romanised text, 880+ Marathi and Hindi number forms, and phonetic roster matching that asks "Pawar or Shinde?". Stages 5-6 are the safety layer: a check against last month and WHO growth velocity (28 cm becomes "did you mean 82?"), then a read-back that states the change. Only a spoken "ho" saves. Stages 7-10 compute WHO z-scores, apply India's 2023 SAM/MAM protocol (WHZ, MUAC and oedema), act on the result and store it offline.</p>
 </section>
 
 <!-- 5 -->
@@ -131,6 +176,12 @@
   </div>
 </section>
 
+<section class="slide">
+  <h1 style="font-size:36px; margin-bottom:12px">The conversation as a state machine: how errors are recovered</h1>
+  <div class="figwrap"><img src="fig/fig3-states.svg" alt="Figure 3" /></div>
+  <p class="cap"><b>Figure 3.</b> <b>No path saves a value the worker did not hear and confirm.</b> An ambiguous name, a missing value or an implausible number each leads to one short spoken question. "nahi" re-opens the reading. "nahi, 9.4 kilo" corrects a single field. An unusual but true value needs a second "ho" and is flagged for the supervisor. Commands such as "kon baaki aahe?" work in any state. Two misses in a row (noise, silence) open the keypad, and keypad values pass the same checks.</p>
+</section>
+
 <!-- 6 -->
 <section class="slide">
   <h1>When things go wrong: noise, accents, mixed languages and misheard numbers</h1>
@@ -143,7 +194,7 @@
     <tr><td><b>Unusual but true reading</b></td><td>Saying yes twice force-saves, and the entry is flagged for the supervisor.</td></tr>
     <tr><td><b>No internet</b></td><td>Readings are stored on the phone (IndexedDB) with a sync queue. Browser speech needs internet, so offline entry uses the keypad or typed input.</td></tr>
   </table>
-  <p class="src">Every rule above is deterministic code with unit tests: 95 tests cover the parser, name matching, WHO z-scores, plausibility and full conversations in English and Marathi.</p>
+  <p class="src">Every rule above is deterministic code with unit tests: 101 tests cover the parser, name matching, WHO z-scores, plausibility and full conversations in English and Marathi.</p>
 </section>
 
 <!-- 6b -->
@@ -171,15 +222,32 @@
   </div>
 </section>
 
+<section class="slide">
+  <h1 style="font-size:36px; margin-bottom:12px">Who hears what: one weighing, three audiences</h1>
+  <div class="cols" style="grid-template-columns: 1.55fr 1fr; gap:22px">
+    <div class="figwrap"><img src="fig/fig4-sequence.svg" alt="Figure 4" /></div>
+    <div>
+      <p class="cap" style="margin-top:0"><b>Figure 4.</b> <b>One spoken reading serves the worker, the family and the system.</b></p>
+      <ul style="margin-top:10px">
+        <li style="font-size:17px">The worker gets the read-back and a spoken SAM alert within seconds, with her hands still on the child.</li>
+        <li style="font-size:17px">The mother gets a message about her own child in Marathi or Hindi: the weight, the change, one action and the next visit date. It is played aloud at the centre or sent on WhatsApp.</li>
+        <li style="font-size:17px">The supervisor or PHC gets the referral slip straight away. When the phone is online, she also gets the honesty score, the watch list and a CSV for Poshan Tracker.</li>
+        <li style="font-size:17px">Round 3 closes the loop: the mother asks by voice note and hears her child's status, a consumer side reaching about 8 crore families.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <!-- 7 -->
 <section class="slide">
-  <h1>What it depends on, and what happens if it gets costly or stops</h1>
-  <table>
+  <h1 style="font-size:40px">Third-party dependencies: cost and availability risks</h1>
+  <table class="tight" style="font-size:14.5px">
     <tr><th style="width:22%">Dependency</th><th style="width:22%">Used for</th><th style="width:20%">Cost</th><th>If it gets costly or stops</th></tr>
     <tr><td>Chrome Web Speech API</td><td>Speech to text (default)</td><td>Free, no key</td><td>Switch to Sarvam in Settings, or use the keypad. All logic runs locally.</td></tr>
     <tr><td>Browser speech synthesis</td><td>Spoken replies</td><td>Free</td><td>Every reply is also shown in large text on screen.</td></tr>
     <tr><td>Sarvam AI Saaras (STT) and Bulbul (TTS), optional</td><td>Stronger Indian-language speech</td><td>About ₹0.49 per audio minute: ~40 children × 30 s ≈ ₹10 per worker per month</td><td>Falls back to browser speech. The engine sits behind one provider interface, so Bhashini or an on-device model can be swapped in.</td></tr>
     <tr><td>WHO Child Growth Standards</td><td>z-scores, SAM/MAM</td><td>Free, bundled</td><td>No network needed. India 2023 SAM/MAM protocol thresholds.</td></tr>
+    <tr><td>WhatsApp (wa.me share)</td><td>Referral slip, family message</td><td>Free (share link)</td><td>The slip is also shown on screen and read aloud at the centre, with SMS as a fallback. Round 3 voice notes would use the WhatsApp Business API, which is priced per conversation.</td></tr>
     <tr><td>Poshan Tracker</td><td>System of record</td><td>—</td><td>No public API: we export a CSV in its entry shape. Real integration needs a state WCD partner (see launch plan).</td></tr>
   </table>
   <div class="card" style="margin-top:18px"><p><b>No AI model decides anything.</b> Speech-to-text only produces text. Numbers, matching, checks and classification are deterministic code, so there is no LLM cost and no hallucinated value. The worker confirms every value; the alert advises referral and does not diagnose.</p></div>
@@ -187,13 +255,13 @@
 
 <!-- 8 -->
 <section class="slide">
-  <h1>Launch plan: from one block to a Poshan Tracker voice module</h1>
+  <h1 style="font-size:40px">Go-to-market plan: one block, one district, one state</h1>
   <div class="cols c3">
-    <div class="card"><span class="tag ok">Months 0–3</span><h2 style="margin-top:10px">Block pilot, 20 centres</h2><ul><li>Partner a CDPO and an NGO already working in anganwadis.</li><li>Train in one 30-minute session at the sector meeting.</li><li>Measure entry time, errors versus supervisor re-measurement, and SAM children caught.</li></ul></div>
-    <div class="card"><span class="tag mam">Months 3–9</span><h2 style="margin-top:10px">District rollout</h2><ul><li>CSR funding (anganwadi CSR precedent in Goa).</li><li>Add 2 more languages and supervisor view.</li><li>Apply to the Sarvam startup programme and Bhashini challenges for speech credits.</li></ul></div>
-    <div class="card"><span class="tag sam">Months 9–18</span><h2 style="margin-top:10px">State partner</h2><ul><li>State WCD MoU as non-financial technical partner.</li><li>Register as a Digital Public Good (open source, do-no-harm by design).</li><li>Offer MoWCD a voice-entry module for Poshan Tracker.</li></ul></div>
+    <div class="card"><span class="tag ok">Months 0–3</span><h2 style="margin-top:10px">Block pilot, 20 centres</h2><ul><li style="font-size:16.5px">Partner a CDPO and an NGO already working in anganwadis.</li><li style="font-size:16.5px">Train in one 30-minute session at the sector meeting.</li><li style="font-size:16.5px">Measure entry time, errors versus supervisor re-measurement, and SAM children caught.</li></ul></div>
+    <div class="card"><span class="tag mam">Months 3–9</span><h2 style="margin-top:10px">District rollout</h2><ul><li style="font-size:16.5px">CSR funding (anganwadi CSR precedent in Goa).</li><li style="font-size:16.5px">Add 2 more languages and supervisor view.</li><li style="font-size:16.5px">Apply to the Sarvam startup programme and Bhashini challenges for speech credits.</li></ul></div>
+    <div class="card"><span class="tag sam">Months 9–18</span><h2 style="margin-top:10px">State partner</h2><ul><li style="font-size:16.5px">State WCD MoU as non-financial technical partner.</li><li style="font-size:16.5px">Register as a Digital Public Good (open source, do-no-harm by design).</li><li style="font-size:16.5px">Offer MoWCD a voice-entry module for Poshan Tracker.</li></ul></div>
   </div>
-  <div class="card" style="margin-top:20px"><p><b>Precedent:</b> Khushi Baby went from a district pilot in Udaipur to the Rajasthan government's technical partner and state-funded scale-up. <b>First users:</b> workers reached through the sector meeting their supervisor already runs every month, so adoption happens where the training already happens.</p></div>
+  <div class="card" style="margin-top:14px"><p style="font-size:16.5px"><b>Precedent:</b> Khushi Baby went from a district pilot in Udaipur to the Rajasthan government's technical partner and state-funded scale-up. <b>First users:</b> workers reached through the sector meeting their supervisor already runs every month, so adoption happens where the training already happens. <b>Buyer and price:</b> the state WCD department (or CSR during the pilot), at about &#8377;75 per worker per month. That is less than half the data allowance already paid, and Sarvam speech costs about &#8377;15 of it. <b>Open source</b> means no vendor lock-in for the government.</p></div>
 </section>
 
 <!-- 9 -->
@@ -221,6 +289,26 @@
   </div>
 </section>
 
+<!-- roadmap -->
+<section class="slide">
+  <h1>From prototype to finale (Round 3)</h1>
+  <div class="cols c2">
+    <div class="card"><h2>Built and tested now</h2><ul>
+      <li>Voice entry of weight, height, MUAC and oedema in Marathi, Hindi and English, with read-back and plausibility checks</li>
+      <li>WHO z-scores and SAM/MAM per the India 2023 protocol; a spoken alert, a WhatsApp referral and a family message</li>
+      <li>Data honesty score, a faltering watch list and a typing-vs-voice race</li>
+      <li>Offline storage, sync queue and CSV export; <code>docker compose up</code> with no keys; 101 automated tests; live demo</li>
+    </ul></div>
+    <div class="card"><h2>Next, in order</h2><ul>
+      <li><b>Field test</b> with anganwadi workers: real Marathi recordings to tune the lexicon, and measured minutes saved</li>
+      <li><b>Supervisor sector view:</b> honesty score, SAM/MAM and overdue weighings across 20-25 centres</li>
+      <li><b>Mother asks by voice:</b> she sends a WhatsApp voice note and hears her child's status</li>
+      <li><b>On-device speech</b> (Chrome <code>processLocally</code>, Vosk Hindi) for fully offline voice</li>
+      <li>Pre-recorded Bulbul prompts: natural Marathi voice at zero runtime cost</li>
+    </ul></div>
+  </div>
+</section>
+
 <!-- 10 -->
 <section class="slide" style="background: var(--ink); color:#fff">
   <h1 style="font-size:54px">ASHA voice tools record what she says.<br />PoshanVaani catches what she mis-said.</h1>
@@ -231,7 +319,7 @@
         <li>One core flow end to end: speak, match, read back, check, save, alert, refer, export.</li>
         <li>Data honesty score, faltering watch list, family voice message, typing-vs-voice race.</li>
         <li>Marathi, Hindi and English voice and UI.</li>
-        <li>Runs with one command and no keys; offline storage; 95 automated tests.</li>
+        <li>Runs with one command and no keys; offline storage; 101 automated tests.</li>
       </ul>
     </div>
     <div>

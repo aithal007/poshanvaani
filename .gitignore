@@ -6,3 +6,7 @@ dist/
 videos/
 e2e/shots/
 docs/deck/preview/
+docs/figures/*.aux
+docs/figures/*.log
+docs/figures/*.pdf
+docs/figures/*-preview.png
