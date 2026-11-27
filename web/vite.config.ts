@@ -5,6 +5,8 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+  // Served from a sub-path on GitHub Pages; "/" everywhere else.
+  base: process.env.BASE_PATH ?? "/",
   plugins: [
     react(),
     tailwindcss(),
