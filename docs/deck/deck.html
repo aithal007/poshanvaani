@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>PoshanVaani: pitch deck</title>
+<style>
+  @font-face { font-family: Mukta; font-weight: 400; src: url(../../web/node_modules/@fontsource/mukta/files/mukta-latin-400-normal.woff2) format("woff2"); }
+  @font-face { font-family: Mukta; font-weight: 600; src: url(../../web/node_modules/@fontsource/mukta/files/mukta-latin-600-normal.woff2) format("woff2"); }
+  @font-face { font-family: Mukta; font-weight: 800; src: url(../../web/node_modules/@fontsource/mukta/files/mukta-latin-800-normal.woff2) format("woff2"); }
+  @font-face { font-family: Mukta; font-weight: 400; unicode-range: U+0900-097F; src: url(../../web/node_modules/@fontsource/mukta/files/mukta-devanagari-400-normal.woff2) format("woff2"); }
+  @font-face { font-family: Mukta; font-weight: 600; unicode-range: U+0900-097F; src: url(../../web/node_modules/@fontsource/mukta/files/mukta-devanagari-600-normal.woff2) format("woff2"); }
+  @font-face { font-family: Mukta; font-weight: 800; unicode-range: U+0900-097F; src: url(../../web/node_modules/@fontsource/mukta/files/mukta-devanagari-800-normal.woff2) format("woff2"); }
+  :root { --ink:#16264a; --soft:#3b4c70; --slate:#5d6b7e; --paper:#eef3f1; --rule:#d5dfdb; --leaf:#1f8a5b; --leafw:#e3f3ea; --tur:#d98f1c; --turw:#fcf0d9; --chilli:#c9342b; --chilliw:#fbe5e2; }
+  @page { size: 1280px 720px; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Mukta, sans-serif; color: var(--ink); background: #888; }
+  .slide { width: 1280px; height: 720px; background: var(--paper); padding: 56px 72px; position: relative; overflow: hidden; page-break-after: always; display: flex; flex-direction: column; }
+  .slide:last-child { page-break-after: auto; }
+  h1 { font-size: 46px; line-height: 1.08; margin: 0 0 18px; font-weight: 800; max-width: 1000px; }
+  h2 { font-size: 22px; margin: 0 0 8px; font-weight: 800; }
+  p, li { font-size: 21px; line-height: 1.42; margin: 0; }
+  ul { margin: 0; padding-left: 22px; } li { margin: 4px 0; }
+  .muted { color: var(--slate); }
+  .foot { position: absolute; bottom: 22px; left: 72px; right: 72px; display: flex; justify-content: space-between; font-size: 14px; color: var(--slate); }
+  .cols { display: grid; gap: 28px; flex: 1; min-height: 0; }
+  .c2 { grid-template-columns: 1fr 1fr; } .c3 { grid-template-columns: 1fr 1fr 1fr; } .c21 { grid-template-columns: 1.35fr 1fr; }
+  .card { background: #fff; border-radius: 22px; padding: 22px 26px; }
+  .big { font-size: 64px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .say { font-weight: 600; } .say::before { content: "“"; } .say::after { content: "”"; }
+  .tag { display: inline-block; border-radius: 999px; padding: 3px 12px; font-size: 15px; font-weight: 800; }
+  .sam { background: var(--chilliw); color: var(--chilli); } .mam { background: var(--turw); color: var(--tur); } .ok { background: var(--leafw); color: var(--leaf); }
+  table { border-collapse: collapse; width: 100%; font-size: 17px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.35; }
+  th { font-size: 14px; color: var(--slate); font-weight: 600; }
+  .phone { height: 520px; border-radius: 26px; border: 6px solid var(--ink); }
+  .steps { counter-reset: s; list-style: none; padding: 0; }
+  .steps li { counter-increment: s; position: relative; padding-left: 46px; margin: 10px 0; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: 2px; width: 32px; height: 32px; border-radius: 50%; background: var(--ink); color: #fff; font-weight: 800; font-size: 17px; display: grid; place-items: center; }
+  .band { display: flex; height: 14px; border-radius: 999px; overflow: hidden; margin: 14px 0 6px; }
+  .dense li { font-size: 18.5px; line-height: 1.36; }
+  .src { font-size: 13px; color: var(--slate); margin-top: auto; padding-top: 10px; line-height: 1.35; }
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="slide" style="background: var(--ink); color: #fff;">
+  <p style="font-size:20px; opacity:.8">Healthcare access · Scaler × Wispr Flow hackathon · Round 2</p>
+  <h1 style="font-size:96px; margin-top:70px">PoshanVaani</h1>
+  <p style="font-size:36px; line-height:1.25; max-width:980px; font-weight:600">Speak the reading while the child is still on the scale.</p>
+  <p style="font-size:24px; margin-top:26px; max-width:1000px; opacity:.9">A hands-free voice register for India's anganwadi workers. It hears the weight and height in Marathi, Hindi or English, reads them back, catches wrong numbers before they are saved, and flags malnutrition the same day.</p>
+  <div class="band" style="width:520px; margin-top:44px"><div style="width:14%;background:var(--chilli)"></div><div style="width:14%;background:var(--tur)"></div><div style="flex:1;background:var(--leaf)"></div></div>
+  <p style="font-size:18px; margin-top:auto; opacity:.85">Code: github.com/aithal007/poshanvaani · Live demo: aithal007.github.io/poshanvaani · Run: <b>docker compose up</b> (no keys needed)</p>
+</section>
+
+<!-- 2 -->
+<section class="slide dense">
+  <h1>Problem and solution: one wrong digit labels a healthy child malnourished</h1>
+  <div class="cols c2">
+    <div class="card">
+      <h2>The problem today</h2>
+      <ul>
+        <li>Every month the worker weighs every child under six, then types each reading into the Poshan Tracker app, field by field, in English script, often hours later from a scribbled note.</li>
+        <li>Typed later means typed wrong: 28 for 82, 92 for 9.2. A wrong entry can mark a healthy child "severely malnourished", and the app makes it hard to undo.</li>
+        <li>Hindi YouTube tutorials on correcting wrong height and weight entries have over 5 lakh views. Tamil Nadu workers keep 16 registers and 2 apps and upload until 10 pm.</li>
+        <li>The cost: bad data hides real malnutrition. In 2023, Poshan Tracker showed wasting 12 percentage points below the national NFHS-5 survey.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>PoshanVaani</h2>
+      <ul>
+        <li>She speaks one sentence with the child still on the scale: <span class="say">Riya Pawar, saha point saha kilo, chauhattar centimetre</span>.</li>
+        <li>It finds the child, reads the values back, and saves only when she says <b>"ho"</b>.</li>
+        <li><b>Before saving</b> it checks the reading against last month and WHO growth limits, and asks <span class="say">Last month 80.5 cm. Now 28? Did you mean 82?</span> while the child is still there.</li>
+        <li>It computes WHO z-scores, speaks a SAM or MAM alert, adds the child to the referral list and prepares a WhatsApp referral slip.</li>
+        <li>Works offline, then syncs and exports in Poshan Tracker's entry shape.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="src">Sources: YouTube search of Poshan Tracker tutorials (top results, Nov 2026); ThePrint and Behan Box ground reports, Tamil Nadu (2025–26); The Wire, Poshan Tracker vs NFHS-5 comparison (2023).</p>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <h1>Who it is for, and how many</h1>
+  <div class="cols c3">
+    <div class="card"><div class="big">13.3 lakh</div><p class="muted" style="margin-top:8px">anganwadi workers: the users. Mostly women aged 25–55, school-educated, on low-cost Android phones, speaking Marathi, Hindi and 20 other languages mixed with English numbers.</p></div>
+    <div class="card"><div class="big">7.7 crore</div><p class="muted" style="margin-top:8px">children tracked every month in Poshan Tracker across 14 lakh anganwadi centres. 6.3 crore of them get monthly growth monitoring: every one is a reading typed by hand today.</p></div>
+    <div class="card"><div class="big">1 user</div><p class="muted" style="margin-top:8px">to start: Sunita, a worker in Nashik district, Maharashtra, with 24 children. The prototype ships with her centre's demo roster: two children named Riya, one child sliding into severe malnutrition, six already weighed today.</p></div>
+  </div>
+  <div class="card" style="margin-top:22px">
+    <p><b>Also benefits:</b> supervisors and PHC medical officers, who get referral lists they can trust; mothers, whose child is referred the same day instead of next month; and state nutrition programmes, whose dashboards depend on honest data.</p>
+  </div>
+  <p class="src">Sources: PIB Poshan Tracker factsheet (July 2026); anganwadi worker count as of 31 July 2026 (Organiser, Oct 2026).</p>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <h1>How it works: the voice flow, step by step</h1>
+  <div class="cols c21">
+    <ol class="steps">
+      <li>She taps once (or says <span class="say">Vajan shuru</span>). Hands-free mode keeps listening after every reply.</li>
+      <li>She says <span class="say">Riya, saha point saha kilo, chauhattar centimetre</span>. The parser reads digits, Devanagari or romanised number words, <i>saade / sava / paune / dedh</i> and units.</li>
+      <li>Two Riyas on the roster, so it asks <span class="say">Riya Pawar or Riya Shinde?</span>. She answers <span class="say">Pawar</span>.</li>
+      <li>Read-back: <span class="say">Riya Pawar. 6.6 kilo, 74 centimetre. Correct?</span>. <b>ho / haan</b> saves; <span class="say">nahi, 6.8 kilo</span> fixes only that field.</li>
+      <li>Saved, then: <span class="say">Riya Pawar lost 600 grams. Severe acute malnutrition. Added to the referral list. Next child.</span> The growth chart point drops into the red band.</li>
+      <li>Any time: <span class="say">kon baaki aahe?</span> names who is left; <span class="say">maagcha radd kara</span> undoes; <span class="say">session band kara</span> ends with a spoken summary.</li>
+    </ol>
+    <img src="img/mobile-04-sam-alert.png" class="phone" alt="Saved reading: Riya Pawar 6.6 kg 74 cm, severe acute malnutrition, WHZ -3.54, growth chart and WhatsApp referral button" style="justify-self:center" />
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <h1>Why voice comes first, not as a feature on top</h1>
+  <div class="cols c2">
+    <div class="card">
+      <ul>
+        <li><b>Her hands are holding the child.</b> The number exists only at the moment the child is on the scale. Any app that waits for her to type later will copy numbers wrongly, which is exactly today's failure.</li>
+        <li><b>She already says it aloud</b> to the mother. PoshanVaani listens to speech that is already happening.</li>
+        <li><b>Voice makes the check come at the right moment.</b> A mistake is caught and re-measured in seconds, not discovered next month when the child has gone home.</li>
+        <li><b>Her language, her numbers.</b> Poshan Tracker's menus are translated, but entry is still typed in English script. Speaking needs no script at all.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Remove voice and nothing is left</h2>
+      <p>Without speech, PoshanVaani becomes one more form, the very thing that is broken. The keypad exists only as a fallback for a noisy room.</p>
+      <h2 style="margin-top:22px">Signature moment</h2>
+      <img src="img/mobile-05-digit-swap.png" alt="Digit swap caught: Aarav Jadhav 10.8 kg, 28 cm flagged, last month 80.5 cm, maybe 82 cm" style="height:330px; border-radius:18px; border:5px solid var(--ink)" />
+    </div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <h1>When things go wrong: noise, accents, mixed languages and misheard numbers</h1>
+  <table>
+    <tr><th style="width:24%">Situation</th><th>What PoshanVaani does</th></tr>
+    <tr><td><b>Misheard number</b> (28 vs 82, 92 vs 9.2, 11300 g)</td><td>Checks against last month and WHO monthly growth limits before saving. Suggests the likely intended value (digit swap, lost decimal, grams as kilos) and asks. Accepts <span class="say">haan</span> or a re-measured number.</td></tr>
+    <tr><td><b>Mixed languages</b></td><td>One lexicon of 880+ Marathi and Hindi number forms (Devanagari and romanised, verified against LibreOffice libnumbertext) plus English. <span class="say">saade nau kilo</span>, <span class="say">नऊ पॉइंट दोन</span>, <span class="say">9.2kg</span>, <span class="say">एकशे दहा</span> all parse.</td></tr>
+    <tr><td><b>Accents and names</b></td><td>Names are matched by phonetic key across scripts (रिया पवार = Riya Pawar = Reeya Powar). The recogniser's alternative transcripts are tried against the roster. Ambiguous names get a spoken question.</td></tr>
+    <tr><td><b>Noise, crying child</b></td><td>Nothing saves without a spoken confirmation. A missing field is asked for alone. After two misses the big keypad opens. The values still go through the same checks.</td></tr>
+    <tr><td><b>Unusual but true reading</b></td><td>Saying yes twice force-saves, and the entry is flagged for the supervisor.</td></tr>
+    <tr><td><b>No internet</b></td><td>Readings are stored on the phone (IndexedDB) with a sync queue. Browser speech needs internet, so offline entry uses the keypad or typed input.</td></tr>
+  </table>
+  <p class="src">Every rule above is deterministic code with unit tests: 84 tests cover the parser, name matching, WHO z-scores, plausibility and full conversations in English and Marathi.</p>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <h1>What it depends on, and what happens if it gets costly or stops</h1>
+  <table>
+    <tr><th style="width:22%">Dependency</th><th style="width:22%">Used for</th><th style="width:20%">Cost</th><th>If it gets costly or stops</th></tr>
+    <tr><td>Chrome Web Speech API</td><td>Speech to text (default)</td><td>Free, no key</td><td>Switch to Sarvam in Settings, or use the keypad. All logic runs locally.</td></tr>
+    <tr><td>Browser speech synthesis</td><td>Spoken replies</td><td>Free</td><td>Every reply is also shown in large text on screen.</td></tr>
+    <tr><td>Sarvam AI Saaras (STT) and Bulbul (TTS), optional</td><td>Stronger Indian-language speech</td><td>About ₹0.49 per audio minute: ~40 children × 30 s ≈ ₹10 per worker per month</td><td>Falls back to browser speech. The engine sits behind one provider interface, so Bhashini or an on-device model can be swapped in.</td></tr>
+    <tr><td>WHO Child Growth Standards</td><td>z-scores, SAM/MAM</td><td>Free, bundled</td><td>No network needed. India 2023 SAM/MAM protocol thresholds.</td></tr>
+    <tr><td>Poshan Tracker</td><td>System of record</td><td>—</td><td>No public API: we export a CSV in its entry shape. Real integration needs a state WCD partner (see launch plan).</td></tr>
+  </table>
+  <div class="card" style="margin-top:18px"><p><b>No AI model decides anything.</b> Speech-to-text only produces text. Numbers, matching, checks and classification are deterministic code, so there is no LLM cost and no hallucinated value. The worker confirms every value; the alert advises referral and does not diagnose.</p></div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <h1>Launch plan: from one block to a Poshan Tracker voice module</h1>
+  <div class="cols c3">
+    <div class="card"><span class="tag ok">Months 0–3</span><h2 style="margin-top:10px">Block pilot, 20 centres</h2><ul><li>Partner a CDPO and an NGO already working in anganwadis.</li><li>Train in one 30-minute session at the sector meeting.</li><li>Measure entry time, errors versus supervisor re-measurement, and SAM children caught.</li></ul></div>
+    <div class="card"><span class="tag mam">Months 3–9</span><h2 style="margin-top:10px">District rollout</h2><ul><li>CSR funding (anganwadi CSR precedent in Goa).</li><li>Add 2 more languages and supervisor view.</li><li>Apply to the Sarvam startup programme and Bhashini challenges for speech credits.</li></ul></div>
+    <div class="card"><span class="tag sam">Months 9–18</span><h2 style="margin-top:10px">State partner</h2><ul><li>State WCD MoU as non-financial technical partner.</li><li>Register as a Digital Public Good (open source, do-no-harm by design).</li><li>Offer MoWCD a voice-entry module for Poshan Tracker.</li></ul></div>
+  </div>
+  <div class="card" style="margin-top:20px"><p><b>Precedent:</b> Khushi Baby went from a district pilot in Udaipur to the Rajasthan government's technical partner and state-funded scale-up. <b>First users:</b> workers reached through the sector meeting their supervisor already runs every month, so adoption happens where the training already happens.</p></div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <h1>How we will know it works</h1>
+  <div class="cols c21">
+    <div class="card">
+      <p>A six-month pilot: 100 voice centres compared with 100 similar centres that keep typing.</p>
+      <ul style="margin-top:10px">
+        <li><b>Accuracy:</b> an independent team re-measures 10% of children each month. Target: 95% of entries within 0.1 kg and 0.5 cm.</li>
+        <li><b>Errors:</b> supervisor correction requests fall by 80%; biologically impossible entries below 0.5%.</li>
+        <li><b>Time:</b> 90% of readings recorded the same day; after-hours data work halved (time diaries).</li>
+        <li><b>Detection:</b> days from a first weight loss to referral fall from about a month to under 7.</li>
+        <li><b>Adoption:</b> by month two, 80% of weighings done by voice.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Main risks, stated honestly</h2>
+      <ul>
+        <li><b>Becoming one more app.</b> Without a state partner accepting the export, workers would re-type. We scale only where it replaces typing.</li>
+        <li><b>Recognition in rural accents and noise.</b> Read-back, plausibility checks and the keypad limit the damage.</li>
+        <li><b>Out of scope:</b> face authentication and network failures in today's apps.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="slide" style="background: var(--ink); color:#fff">
+  <h1 style="font-size:54px">ASHA voice tools record what she says.<br />PoshanVaani catches what she mis-said.</h1>
+  <div class="cols c2" style="margin-top:20px">
+    <div>
+      <p style="font-size:24px"><b>Working prototype today</b></p>
+      <ul style="margin-top:8px">
+        <li>One core flow end to end: speak, match, read back, check, save, alert, refer, export.</li>
+        <li>Marathi, Hindi and English voice and UI.</li>
+        <li>Runs with one command and no keys; offline storage; 84 automated tests.</li>
+      </ul>
+    </div>
+    <div>
+      <p style="font-size:24px"><b>At the finale</b></p>
+      <ul style="margin-top:8px">
+        <li>Real Marathi field recordings to tune the lexicon.</li>
+        <li>MUAC and oedema capture, supervisor view, more languages.</li>
+        <li>On-device speech for full offline use.</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:20px; margin-top:auto">github.com/aithal007/poshanvaani · aithal007.github.io/poshanvaani · Parikshith Aithal K V</p>
+</section>
+
+</body>
+</html>

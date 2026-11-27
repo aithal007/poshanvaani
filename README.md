@@ -13,6 +13,8 @@ It works offline and exports for Poshan Tracker.
 
 Theme: **Healthcare access** · Scaler × Wispr Flow hackathon, Round 2.
 
+**Live demo:** https://aithal007.github.io/poshanvaani/ (open in Chrome, allow the microphone) · **Pitch deck:** [`docs/PoshanVaani-pitch-deck.pdf`](docs/PoshanVaani-pitch-deck.pdf)
+
 ---
 
 ## Run it (one command, no keys)
