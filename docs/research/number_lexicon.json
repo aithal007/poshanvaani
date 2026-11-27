@@ -1,0 +1,1613 @@
+{
+ "_meta": {
+  "generated": "2026-11-27",
+  "sources": {
+   "mr_primary": "libnumbertext mr.sor (hard-coded 0-100): https://sources.debian.org/src/libnumbertext/1.0.11-4/data/mr.sor",
+   "mr_variants": "https://www.shalusharma.com/2024/09/marathi-numbers-1-to-100.html ; https://marathi.indiatyping.com/index.php/marathi-typing-tips-free/marathi-counting (0-20)",
+   "hi_primary": "https://www.vedantu.com/general-knowledge/how-to-count-1-to-100-in-hindi ; https://www.schooldekho.org/school/blog/details/1-to-100-in-hindi-1496",
+   "hi_romanised_check": "https://en.wikipedia.org/wiki/Hindustani_numerals (IAST table 0-99, after McGregor 1987)"
+  },
+  "matching_advice": [
+   "First form in each list is the standard Devanagari spelling; later Devanagari entries are attested/common variants; Latin entries are lowercase romanised variants.",
+   "Normalise input and lexicon the same way: NFC, lowercase Latin, strip ZWJ/ZWNJ (U+200D/U+200C) and nukta (U+093C), fold chandrabindu (U+0901) to anusvara (U+0902).",
+   "Marathi eyelash-ra: 74/84/94 are listed as ऱ्य (U+0931), र्‍य (with ZWJ) and र्य; after ZWJ stripping the last two coincide.",
+   "Digits: map Devanagari ०-९ (U+0966-U+096F) to ASCII before numeric parsing; Chrome often returns digits instead of words.",
+   "Multi-word forms exist ('एक सौ', 'ek sau', 'हां जी', 'theek hai'): use longest match over tokens.",
+   "Fraction prefixes are often glued to the number in Marathi (साडेतीन, सव्वादोन, पावणेचार, साडेनऊ): strip a known fraction prefix from a token, then look up the remainder.",
+   "Marathi 'एकशे' (one hundred as compound prefix, e.g. एकशे वीस = 120) and 'शे' suffix (दोनशे = 200) are not in the 0-100 table; heights max 125 so handle 'एकशे X' / 'ek so X' / 'sau X' / 'एक सौ X' as 100+X."
+  ],
+  "ambiguities": [
+   "100: Hindi सौ/sau vs Marathi शंभर/shambhar. Romanised 'sau' is near Marathi 'sava/savva' (+0.25); match whole tokens only.",
+   "Many numbers share spelling and value across hi and mr (एक, तीन, चार, सात, आठ, तीस, साठ, सत्तर, sattar, chalis...). Harmless.",
+   "9: Hindi नौ, Marathi नऊ; 5: Hindi पांच, Marathi पाच (Marathi lists also show पांच).",
+   "Marathi 61-68: both ष्ट and ष्ठ spellings in use (एकसष्ट / एकसष्ठ); libnumbertext uses ष्ट.",
+   "Marathi 19: एकोणीस (standard) vs एकोणवीस (one list).",
+   "Marathi 99: one source gives 'एकोणशंभर'; standard is नव्याण्णव. Not included.",
+   "Hindi 23 'teis' vs 30 'tees' and Hindi 33 'taintis' vs 35 'paintis' / 37 'saintis' are near-homophones; expect ASR confusion.",
+   "Romanised 'no' is deliberately not listed for Hindi 9 (clashes with confirm_no); 'nav' for Marathi 9 also means 'name'/'new' in some contexts.",
+   "Marathi 'हा'/'ha' means 'this' as well as a weak 'yes'.",
+   "'paav'/'पाव' alone = 0.25 ('paav kilo' = 250 g), but 'पावणे'/'paune' = minus 0.25 of the following number.",
+   "Hindi normally uses डेढ़/ढाई for 1.5/2.5, not 'saadhe ek'/'saadhe do'; 'saadhe' appears with 3+. Marathi likewise uses दीड/अडीच.",
+   "'saade' (साडे, Marathi) and 'saadhe' (साढ़े, Hindi) both mean +0.5.",
+   "Romanised Marathi 'tis'/'tees' (30) also equal Hindi 30 - same value, fine; romanised 'sat' = 7 in both."
+  ]
+ },
+ "hi": {
+  "0": [
+   "शून्य",
+   "सिफ़र",
+   "सिफर",
+   "shunya",
+   "shoonya",
+   "sifar",
+   "zero"
+  ],
+  "1": [
+   "एक",
+   "ek"
+  ],
+  "2": [
+   "दो",
+   "do"
+  ],
+  "3": [
+   "तीन",
+   "teen",
+   "tin"
+  ],
+  "4": [
+   "चार",
+   "char",
+   "chaar"
+  ],
+  "5": [
+   "पांच",
+   "पाँच",
+   "paanch",
+   "panch",
+   "pach"
+  ],
+  "6": [
+   "छह",
+   "छः",
+   "छे",
+   "छै",
+   "chhah",
+   "chhe",
+   "chah",
+   "che"
+  ],
+  "7": [
+   "सात",
+   "saat",
+   "sat"
+  ],
+  "8": [
+   "आठ",
+   "aath",
+   "ath"
+  ],
+  "9": [
+   "नौ",
+   "nau",
+   "nao"
+  ],
+  "10": [
+   "दस",
+   "das",
+   "dus"
+  ],
+  "11": [
+   "ग्यारह",
+   "gyarah",
+   "gyara",
+   "gyaarah"
+  ],
+  "12": [
+   "बारह",
+   "barah",
+   "baarah",
+   "bara"
+  ],
+  "13": [
+   "तेरह",
+   "terah",
+   "tera"
+  ],
+  "14": [
+   "चौदह",
+   "chaudah",
+   "chauda",
+   "chodah"
+  ],
+  "15": [
+   "पंद्रह",
+   "पन्द्रह",
+   "pandrah",
+   "pandra",
+   "pandhra"
+  ],
+  "16": [
+   "सोलह",
+   "solah",
+   "sola"
+  ],
+  "17": [
+   "सत्रह",
+   "satrah",
+   "satra"
+  ],
+  "18": [
+   "अठारह",
+   "atharah",
+   "athara",
+   "attharah"
+  ],
+  "19": [
+   "उन्नीस",
+   "उन्निस",
+   "unnis",
+   "unees",
+   "unnees"
+  ],
+  "20": [
+   "बीस",
+   "bees",
+   "bis"
+  ],
+  "21": [
+   "इक्कीस",
+   "ikkis",
+   "ikkees"
+  ],
+  "22": [
+   "बाईस",
+   "bais",
+   "baees",
+   "baais"
+  ],
+  "23": [
+   "तेईस",
+   "teis",
+   "teyis",
+   "teees"
+  ],
+  "24": [
+   "चौबीस",
+   "chaubis",
+   "chaubees",
+   "chobis"
+  ],
+  "25": [
+   "पच्चीस",
+   "pachchis",
+   "pacchis",
+   "pachis",
+   "pachees"
+  ],
+  "26": [
+   "छब्बीस",
+   "chhabbis",
+   "chabbis",
+   "chhabbees"
+  ],
+  "27": [
+   "सत्ताईस",
+   "sattais",
+   "sattaees",
+   "sataees"
+  ],
+  "28": [
+   "अट्ठाईस",
+   "अठ्ठाईस",
+   "atthais",
+   "athais",
+   "atthaees"
+  ],
+  "29": [
+   "उनतीस",
+   "उन्तीस",
+   "untis",
+   "untees",
+   "unatis"
+  ],
+  "30": [
+   "तीस",
+   "tees",
+   "tis"
+  ],
+  "31": [
+   "इकतीस",
+   "इकत्तीस",
+   "iktis",
+   "ikatis",
+   "iktees",
+   "ikattis"
+  ],
+  "32": [
+   "बत्तीस",
+   "battis",
+   "battees"
+  ],
+  "33": [
+   "तैंतीस",
+   "तेंतीस",
+   "तैतीस",
+   "taintis",
+   "tentis",
+   "taintees"
+  ],
+  "34": [
+   "चौंतीस",
+   "चौतीस",
+   "chauntis",
+   "chautis",
+   "chauntees",
+   "chontis"
+  ],
+  "35": [
+   "पैंतीस",
+   "पैतीस",
+   "paintis",
+   "pentis",
+   "paintees"
+  ],
+  "36": [
+   "छत्तीस",
+   "chhattis",
+   "chattis",
+   "chhattees"
+  ],
+  "37": [
+   "सैंतीस",
+   "सैतीस",
+   "saintis",
+   "sentis",
+   "saintees"
+  ],
+  "38": [
+   "अड़तीस",
+   "अडतीस",
+   "adtis",
+   "artis",
+   "adtees",
+   "artees"
+  ],
+  "39": [
+   "उनतालीस",
+   "उनचालीस",
+   "उन्तालीस",
+   "untalis",
+   "untalees",
+   "unchalis"
+  ],
+  "40": [
+   "चालीस",
+   "chalis",
+   "chaalis",
+   "chalees"
+  ],
+  "41": [
+   "इकतालीस",
+   "इक्तालीस",
+   "iktalis",
+   "iktalees",
+   "iktaalis"
+  ],
+  "42": [
+   "बयालीस",
+   "बियालीस",
+   "bayalis",
+   "bayalees",
+   "byalis"
+  ],
+  "43": [
+   "तैंतालीस",
+   "तैतालीस",
+   "तेंतालीस",
+   "taintalis",
+   "tentalis",
+   "taintalees"
+  ],
+  "44": [
+   "चवालीस",
+   "चौवालीस",
+   "चव्वालीस",
+   "chavalis",
+   "chauvalis",
+   "chawalis",
+   "chavalees"
+  ],
+  "45": [
+   "पैंतालीस",
+   "पैतालीस",
+   "paintalis",
+   "pentalis",
+   "paintalees"
+  ],
+  "46": [
+   "छियालीस",
+   "छयालीस",
+   "छयालिस",
+   "chhiyalis",
+   "chiyalis",
+   "chhiyalees"
+  ],
+  "47": [
+   "सैंतालीस",
+   "सैतालीस",
+   "saintalis",
+   "sentalis",
+   "saintalees"
+  ],
+  "48": [
+   "अड़तालीस",
+   "अडतालीस",
+   "adtalis",
+   "artalis",
+   "adtalees"
+  ],
+  "49": [
+   "उनचास",
+   "उन्चास",
+   "unchas",
+   "unchaas"
+  ],
+  "50": [
+   "पचास",
+   "pachas",
+   "pachaas"
+  ],
+  "51": [
+   "इक्यावन",
+   "इकावन",
+   "ikyavan",
+   "ikkyavan",
+   "ikavan"
+  ],
+  "52": [
+   "बावन",
+   "bavan",
+   "baavan"
+  ],
+  "53": [
+   "तिरेपन",
+   "तिरपन",
+   "त्रेपन",
+   "tirpan",
+   "tirepan",
+   "trepan"
+  ],
+  "54": [
+   "चौवन",
+   "चौव्वन",
+   "chauvan",
+   "chauwan",
+   "chovan"
+  ],
+  "55": [
+   "पचपन",
+   "pachpan",
+   "pachapan"
+  ],
+  "56": [
+   "छप्पन",
+   "chhappan",
+   "chappan"
+  ],
+  "57": [
+   "सत्तावन",
+   "sattavan",
+   "sattaavan",
+   "satavan"
+  ],
+  "58": [
+   "अट्ठावन",
+   "अठ्ठावन",
+   "atthavan",
+   "athavan",
+   "atthaavan"
+  ],
+  "59": [
+   "उनसठ",
+   "unsath",
+   "unsaath"
+  ],
+  "60": [
+   "साठ",
+   "saath",
+   "sath"
+  ],
+  "61": [
+   "इकसठ",
+   "iksath",
+   "iksaath"
+  ],
+  "62": [
+   "बासठ",
+   "basath",
+   "baasath"
+  ],
+  "63": [
+   "तिरेसठ",
+   "तिरसठ",
+   "त्रेसठ",
+   "tirsath",
+   "tiresath",
+   "tresath"
+  ],
+  "64": [
+   "चौंसठ",
+   "चौसठ",
+   "chaunsath",
+   "chausath",
+   "chonsath"
+  ],
+  "65": [
+   "पैंसठ",
+   "पैसठ",
+   "painsath",
+   "pensath",
+   "painsaath"
+  ],
+  "66": [
+   "छियासठ",
+   "छाछठ",
+   "chhiyasath",
+   "chiyasath",
+   "chhiyaasath"
+  ],
+  "67": [
+   "सड़सठ",
+   "सडसठ",
+   "sadsath",
+   "sarsath",
+   "sadsaath"
+  ],
+  "68": [
+   "अड़सठ",
+   "अडसठ",
+   "adsath",
+   "arsath",
+   "adsaath"
+  ],
+  "69": [
+   "उनहत्तर",
+   "unhattar",
+   "unhatar"
+  ],
+  "70": [
+   "सत्तर",
+   "sattar",
+   "satar"
+  ],
+  "71": [
+   "इकहत्तर",
+   "ikhattar",
+   "ikahattar",
+   "ikhatar"
+  ],
+  "72": [
+   "बहत्तर",
+   "bahattar",
+   "bahatar"
+  ],
+  "73": [
+   "तिहत्तर",
+   "tihattar",
+   "tihatar"
+  ],
+  "74": [
+   "चौहत्तर",
+   "chauhattar",
+   "chauhatar",
+   "chohattar"
+  ],
+  "75": [
+   "पचहत्तर",
+   "पिचहत्तर",
+   "pachhattar",
+   "pachattar",
+   "pachahattar",
+   "pichhattar"
+  ],
+  "76": [
+   "छिहत्तर",
+   "छियत्तर",
+   "chhihattar",
+   "chihattar",
+   "chhiyattar"
+  ],
+  "77": [
+   "सतहत्तर",
+   "सतत्तर",
+   "sathattar",
+   "satattar",
+   "satahattar"
+  ],
+  "78": [
+   "अठहत्तर",
+   "अठत्तर",
+   "athhattar",
+   "athattar",
+   "athahattar"
+  ],
+  "79": [
+   "उन्यासी",
+   "उन्नासी",
+   "उनासी",
+   "उनयासी",
+   "unasi",
+   "unnasi",
+   "unyasi"
+  ],
+  "80": [
+   "अस्सी",
+   "assi",
+   "asi",
+   "assee"
+  ],
+  "81": [
+   "इक्यासी",
+   "इकासी",
+   "ikyasi",
+   "ikyaasi",
+   "ikasi"
+  ],
+  "82": [
+   "बयासी",
+   "बियासी",
+   "bayasi",
+   "byasi",
+   "bayaasi"
+  ],
+  "83": [
+   "तिरासी",
+   "tirasi",
+   "tiraasi"
+  ],
+  "84": [
+   "चौरासी",
+   "chaurasi",
+   "chourasi",
+   "chauraasi"
+  ],
+  "85": [
+   "पचासी",
+   "pachasi",
+   "pachaasi"
+  ],
+  "86": [
+   "छियासी",
+   "chhiyasi",
+   "chiyasi",
+   "chhiyaasi"
+  ],
+  "87": [
+   "सत्तासी",
+   "sattasi",
+   "sattaasi"
+  ],
+  "88": [
+   "अट्ठासी",
+   "अठ्ठासी",
+   "atthasi",
+   "athasi",
+   "atthaasi"
+  ],
+  "89": [
+   "नवासी",
+   "नव्वासी",
+   "navasi",
+   "navaasi",
+   "nawasi"
+  ],
+  "90": [
+   "नब्बे",
+   "नव्वे",
+   "nabbe",
+   "navve",
+   "nabbay"
+  ],
+  "91": [
+   "इक्यानवे",
+   "इकानवे",
+   "ikyanve",
+   "ikyaanve",
+   "ikkyanve"
+  ],
+  "92": [
+   "बानवे",
+   "बयानवे",
+   "बानबे",
+   "baanve",
+   "banve",
+   "bayanve"
+  ],
+  "93": [
+   "तिरानवे",
+   "तिरानबे",
+   "tiranve",
+   "tiraanve"
+  ],
+  "94": [
+   "चौरानवे",
+   "चौरानबे",
+   "chauranve",
+   "chouranve",
+   "chauraanve"
+  ],
+  "95": [
+   "पचानवे",
+   "पचानबे",
+   "pachanve",
+   "pachaanve"
+  ],
+  "96": [
+   "छियानवे",
+   "छियानबे",
+   "chhiyanve",
+   "chiyanve",
+   "chhiyaanve"
+  ],
+  "97": [
+   "सत्तानवे",
+   "सत्तानबे",
+   "sattanve",
+   "sattaanve"
+  ],
+  "98": [
+   "अट्ठानवे",
+   "अठ्ठानवे",
+   "अट्ठानबे",
+   "atthanve",
+   "athanve",
+   "atthaanve"
+  ],
+  "99": [
+   "निन्यानवे",
+   "निन्यानबे",
+   "ninyanve",
+   "ninyaanve",
+   "ninnyanve"
+  ],
+  "100": [
+   "सौ",
+   "एक सौ",
+   "sau",
+   "ek sau"
+  ]
+ },
+ "mr": {
+  "0": [
+   "शून्य",
+   "शुन्य",
+   "shunya",
+   "shoonya",
+   "zero"
+  ],
+  "1": [
+   "एक",
+   "ek"
+  ],
+  "2": [
+   "दोन",
+   "don",
+   "dona"
+  ],
+  "3": [
+   "तीन",
+   "teen",
+   "tin"
+  ],
+  "4": [
+   "चार",
+   "char",
+   "chaar"
+  ],
+  "5": [
+   "पाच",
+   "पांच",
+   "pach",
+   "paach",
+   "panch"
+  ],
+  "6": [
+   "सहा",
+   "saha",
+   "sahaa"
+  ],
+  "7": [
+   "सात",
+   "sat",
+   "saat"
+  ],
+  "8": [
+   "आठ",
+   "aath",
+   "ath"
+  ],
+  "9": [
+   "नऊ",
+   "nau",
+   "nav",
+   "nhau"
+  ],
+  "10": [
+   "दहा",
+   "daha",
+   "dahaa"
+  ],
+  "11": [
+   "अकरा",
+   "akra",
+   "akara",
+   "akraa"
+  ],
+  "12": [
+   "बारा",
+   "bara",
+   "baara"
+  ],
+  "13": [
+   "तेरा",
+   "tera",
+   "teraa"
+  ],
+  "14": [
+   "चौदा",
+   "chauda",
+   "chaudaa",
+   "chouda"
+  ],
+  "15": [
+   "पंधरा",
+   "pandhra",
+   "pandhara",
+   "pandhraa"
+  ],
+  "16": [
+   "सोळा",
+   "sola",
+   "solaa",
+   "sohla"
+  ],
+  "17": [
+   "सतरा",
+   "satra",
+   "satara",
+   "satraa"
+  ],
+  "18": [
+   "अठरा",
+   "athra",
+   "athara",
+   "atharaa"
+  ],
+  "19": [
+   "एकोणीस",
+   "एकोणवीस",
+   "ekonis",
+   "ekonees",
+   "ekonvis"
+  ],
+  "20": [
+   "वीस",
+   "vis",
+   "vees",
+   "wees"
+  ],
+  "21": [
+   "एकवीस",
+   "ekvis",
+   "ekvees"
+  ],
+  "22": [
+   "बावीस",
+   "bavis",
+   "baavees",
+   "bavees"
+  ],
+  "23": [
+   "तेवीस",
+   "tevis",
+   "tevees"
+  ],
+  "24": [
+   "चोवीस",
+   "चौवीस",
+   "chovis",
+   "chovees",
+   "chauvis"
+  ],
+  "25": [
+   "पंचवीस",
+   "panchvis",
+   "panchvees",
+   "pachvis"
+  ],
+  "26": [
+   "सव्वीस",
+   "savvis",
+   "savvees",
+   "savis"
+  ],
+  "27": [
+   "सत्तावीस",
+   "sattavis",
+   "sattavees",
+   "satavis"
+  ],
+  "28": [
+   "अठ्ठावीस",
+   "अठ्ठाविस",
+   "aththavis",
+   "atthavis",
+   "athavis",
+   "atthavees"
+  ],
+  "29": [
+   "एकोणतीस",
+   "ekontis",
+   "ekontees"
+  ],
+  "30": [
+   "तीस",
+   "tis",
+   "tees"
+  ],
+  "31": [
+   "एकतीस",
+   "ektis",
+   "ektees"
+  ],
+  "32": [
+   "बत्तीस",
+   "battis",
+   "battees",
+   "batis"
+  ],
+  "33": [
+   "तेहतीस",
+   "तेहेतीस",
+   "tehtis",
+   "tehetis",
+   "tehatis",
+   "tehtees"
+  ],
+  "34": [
+   "चौतीस",
+   "चौंतीस",
+   "chautis",
+   "chauntis",
+   "chautees",
+   "choutis"
+  ],
+  "35": [
+   "पस्तीस",
+   "pastis",
+   "pastees"
+  ],
+  "36": [
+   "छत्तीस",
+   "chhattis",
+   "chattis",
+   "chhattees"
+  ],
+  "37": [
+   "सदतीस",
+   "सडतीस",
+   "sadtis",
+   "sadatis",
+   "sadtees"
+  ],
+  "38": [
+   "अडतीस",
+   "adtis",
+   "adatis",
+   "adtees"
+  ],
+  "39": [
+   "एकोणचाळीस",
+   "ekonchalis",
+   "ekonchalees",
+   "ekonchaalis"
+  ],
+  "40": [
+   "चाळीस",
+   "chalis",
+   "chaalis",
+   "chalees"
+  ],
+  "41": [
+   "एक्केचाळीस",
+   "एकेचाळीस",
+   "ekkechalis",
+   "ekechalis",
+   "ekkechalees"
+  ],
+  "42": [
+   "बेचाळीस",
+   "bechalis",
+   "bechalees",
+   "bechaalis"
+  ],
+  "43": [
+   "त्रेचाळीस",
+   "trechalis",
+   "trechalees",
+   "trechaalis"
+  ],
+  "44": [
+   "चव्वेचाळीस",
+   "chavvechalis",
+   "chavechalis",
+   "chavvechalees"
+  ],
+  "45": [
+   "पंचेचाळीस",
+   "panchechalis",
+   "panchechalees",
+   "panchechaalis"
+  ],
+  "46": [
+   "सेहेचाळीस",
+   "सेहचाळीस",
+   "sehechalis",
+   "sehchalis",
+   "sehechalees"
+  ],
+  "47": [
+   "सत्तेचाळीस",
+   "sattechalis",
+   "sattechalees",
+   "satechalis"
+  ],
+  "48": [
+   "अठ्ठेचाळीस",
+   "aththechalis",
+   "atthechalis",
+   "athechalis"
+  ],
+  "49": [
+   "एकोणपन्नास",
+   "ekonpannas",
+   "ekonpanas",
+   "ekonpannaas"
+  ],
+  "50": [
+   "पन्नास",
+   "pannas",
+   "pannaas",
+   "panas"
+  ],
+  "51": [
+   "एकावन्न",
+   "एक्कावन्न",
+   "एक्कावन",
+   "ekkavanna",
+   "ekavanna",
+   "ekavan",
+   "ekkavan"
+  ],
+  "52": [
+   "बावन्न",
+   "बावन",
+   "bavanna",
+   "baavanna",
+   "bavan"
+  ],
+  "53": [
+   "त्रेपन्न",
+   "त्रेपन",
+   "trepanna",
+   "trepan"
+  ],
+  "54": [
+   "चौपन्न",
+   "चोपन्न",
+   "chaupanna",
+   "chopanna",
+   "chaupan",
+   "chopan"
+  ],
+  "55": [
+   "पंचावन्न",
+   "पंचावन",
+   "panchavanna",
+   "panchavan"
+  ],
+  "56": [
+   "छप्पन्न",
+   "छपन्न",
+   "छप्पन",
+   "chhappanna",
+   "chappanna",
+   "chhappan",
+   "chappan"
+  ],
+  "57": [
+   "सत्तावन्न",
+   "सत्तावन",
+   "sattavanna",
+   "sattavan",
+   "satavanna"
+  ],
+  "58": [
+   "अठ्ठावन्न",
+   "अठ्ठावन",
+   "aththavanna",
+   "atthavanna",
+   "athavanna",
+   "atthavan"
+  ],
+  "59": [
+   "एकोणसाठ",
+   "ekonsath",
+   "ekonsaath"
+  ],
+  "60": [
+   "साठ",
+   "saath",
+   "sath"
+  ],
+  "61": [
+   "एकसष्ट",
+   "एकसष्ठ",
+   "eksashta",
+   "eksasht",
+   "eksashtha"
+  ],
+  "62": [
+   "बासष्ट",
+   "बासष्ठ",
+   "basashta",
+   "baasashta",
+   "basasht"
+  ],
+  "63": [
+   "त्रेसष्ट",
+   "त्रेसष्ठ",
+   "tresashta",
+   "tresasht",
+   "tresashtha"
+  ],
+  "64": [
+   "चौसष्ट",
+   "चौसष्ठ",
+   "chausashta",
+   "chausasht",
+   "chausashtha"
+  ],
+  "65": [
+   "पासष्ट",
+   "पासष्ठ",
+   "पंचसष्ठ",
+   "pasashta",
+   "paasashta",
+   "panchsashta"
+  ],
+  "66": [
+   "सहासष्ट",
+   "सहासष्ठ",
+   "sahasashta",
+   "sahasasht"
+  ],
+  "67": [
+   "सदुसष्ट",
+   "सडसष्ठ",
+   "सदुसष्ठ",
+   "sadusashta",
+   "sadsashta",
+   "sadusasht"
+  ],
+  "68": [
+   "अडुसष्ट",
+   "अडसष्ठ",
+   "अडुसष्ठ",
+   "adusashta",
+   "adsashta",
+   "adusasht"
+  ],
+  "69": [
+   "एकोणसत्तर",
+   "ekonsattar",
+   "ekonsatar"
+  ],
+  "70": [
+   "सत्तर",
+   "sattar",
+   "satar"
+  ],
+  "71": [
+   "एकाहत्तर",
+   "एक्काहत्तर",
+   "एक्याहत्तर",
+   "ekahattar",
+   "ekkahattar",
+   "ekyahattar",
+   "ekahatar"
+  ],
+  "72": [
+   "बाहत्तर",
+   "bahattar",
+   "baahattar",
+   "bahatar"
+  ],
+  "73": [
+   "त्र्याहत्तर",
+   "tryahattar",
+   "tryahatar",
+   "tryaahattar"
+  ],
+  "74": [
+   "चौऱ्याहत्तर",
+   "चौर्‍याहत्तर",
+   "चौर्याहत्तर",
+   "chauryahattar",
+   "chauryaahattar",
+   "chouryahattar",
+   "chauryahatar"
+  ],
+  "75": [
+   "पंचाहत्तर",
+   "पंच्याहत्तर",
+   "panchahattar",
+   "panchyahattar",
+   "panchahatar"
+  ],
+  "76": [
+   "शाहत्तर",
+   "शहात्तर",
+   "शहाहत्तर",
+   "shahattar",
+   "shahatar",
+   "shahaattar"
+  ],
+  "77": [
+   "सत्त्याहत्तर",
+   "सत्याहत्तर",
+   "sattyahattar",
+   "satyahattar",
+   "sattyahatar"
+  ],
+  "78": [
+   "अठ्ठ्याहत्तर",
+   "अठ्याहत्तर",
+   "aththyahattar",
+   "atthyahattar",
+   "athyahattar"
+  ],
+  "79": [
+   "एकोणऐंशी",
+   "ekonainshi",
+   "ekonenshi",
+   "ekonaishi"
+  ],
+  "80": [
+   "ऐंशी",
+   "ऐशी",
+   "ainshi",
+   "aenshi",
+   "enshi",
+   "aishi"
+  ],
+  "81": [
+   "एक्याऐंशी",
+   "एक्क्याऐंशी",
+   "ekyainshi",
+   "ekkyainshi",
+   "ekyaenshi"
+  ],
+  "82": [
+   "ब्याऐंशी",
+   "byainshi",
+   "byaenshi",
+   "byaaenshi"
+  ],
+  "83": [
+   "त्र्याऐंशी",
+   "tryainshi",
+   "tryaenshi"
+  ],
+  "84": [
+   "चौऱ्याऐंशी",
+   "चौर्‍याऐंशी",
+   "चौर्याऐंशी",
+   "chauryainshi",
+   "chouryainshi",
+   "chauryaenshi"
+  ],
+  "85": [
+   "पंचाऐंशी",
+   "पंच्याऐंशी",
+   "panchainshi",
+   "panchyainshi",
+   "panchaenshi"
+  ],
+  "86": [
+   "शहाऐंशी",
+   "शहाऐशी",
+   "shahainshi",
+   "shahaenshi",
+   "shahaishi"
+  ],
+  "87": [
+   "सत्त्याऐंशी",
+   "सत्याऐंशी",
+   "sattyainshi",
+   "satyainshi",
+   "sattyaenshi"
+  ],
+  "88": [
+   "अठ्ठ्याऐंशी",
+   "अठ्याऐंशी",
+   "aththyainshi",
+   "atthyainshi",
+   "athyainshi"
+  ],
+  "89": [
+   "एकोणनव्वद",
+   "ekonnavvad",
+   "ekonnavad",
+   "ekonavvad"
+  ],
+  "90": [
+   "नव्वद",
+   "navvad",
+   "navad",
+   "navvat"
+  ],
+  "91": [
+   "एक्याण्णव",
+   "एक्क्याण्णव",
+   "ekyannav",
+   "ekyanav",
+   "ekkyannav"
+  ],
+  "92": [
+   "ब्याण्णव",
+   "byannav",
+   "byanav",
+   "byaannav"
+  ],
+  "93": [
+   "त्र्याण्णव",
+   "tryannav",
+   "tryanav"
+  ],
+  "94": [
+   "चौऱ्याण्णव",
+   "चौर्‍याण्णव",
+   "चौर्याण्णव",
+   "chauryannav",
+   "chouryannav",
+   "chauryanav"
+  ],
+  "95": [
+   "पंचाण्णव",
+   "पंच्याण्णव",
+   "panchannav",
+   "panchyannav",
+   "panchanav"
+  ],
+  "96": [
+   "शहाण्णव",
+   "shahannav",
+   "shahanav"
+  ],
+  "97": [
+   "सत्त्याण्णव",
+   "सत्याण्णव",
+   "sattyannav",
+   "satyannav",
+   "sattyanav"
+  ],
+  "98": [
+   "अठ्ठ्याण्णव",
+   "अठ्याण्णव",
+   "aththyannav",
+   "atthyannav",
+   "athyannav"
+  ],
+  "99": [
+   "नव्याण्णव",
+   "navyannav",
+   "navyanav",
+   "navvyannav"
+  ],
+  "100": [
+   "शंभर",
+   "shambhar",
+   "shambar",
+   "shembhar"
+  ]
+ },
+ "digits": {
+  "०": "0",
+  "१": "1",
+  "२": "2",
+  "३": "3",
+  "४": "4",
+  "५": "5",
+  "६": "6",
+  "७": "7",
+  "८": "8",
+  "९": "9"
+ },
+ "fractions": {
+  "sava": {
+   "value_op": "+0.25",
+   "applies": "to the following number (sava teen = 3.25)",
+   "forms": [
+    "सवा",
+    "सव्वा",
+    "sava",
+    "savva",
+    "sawa",
+    "savaa",
+    "sawwa"
+   ]
+  },
+  "saade": {
+   "value_op": "+0.5",
+   "applies": "to the following number (saade nau = 9.5)",
+   "forms": [
+    "साढ़े",
+    "साढे",
+    "साडे",
+    "saade",
+    "saadhe",
+    "sade",
+    "sadhe",
+    "saadey",
+    "saare"
+   ]
+  },
+  "paune": {
+   "value_op": "-0.25",
+   "applies": "to the following number (paune das = 9.75)",
+   "forms": [
+    "पौने",
+    "पावणे",
+    "पावने",
+    "पौणे",
+    "paune",
+    "pone",
+    "pavne",
+    "paavne",
+    "pavane",
+    "paavane"
+   ]
+  },
+  "dedh": {
+   "value_op": "=1.5",
+   "applies": "standalone value",
+   "forms": [
+    "डेढ़",
+    "डेढ",
+    "डेड",
+    "दीड",
+    "dedh",
+    "ded",
+    "dedha",
+    "deedh",
+    "deed",
+    "did"
+   ]
+  },
+  "adhai": {
+   "value_op": "=2.5",
+   "applies": "standalone value",
+   "forms": [
+    "ढाई",
+    "अढ़ाई",
+    "अढाई",
+    "अडीच",
+    "dhai",
+    "dhaai",
+    "adhai",
+    "adhaai",
+    "adich",
+    "adeech"
+   ]
+  },
+  "paav": {
+   "value_op": "=0.25",
+   "applies": "standalone quarter (paav kilo = 0.25 kg)",
+   "forms": [
+    "पाव",
+    "पौवा",
+    "paav",
+    "pav",
+    "pao"
+   ]
+  },
+  "aadha": {
+   "value_op": "=0.5",
+   "applies": "standalone half (aadha kilo = 0.5 kg)",
+   "forms": [
+    "आधा",
+    "आधी",
+    "आधे",
+    "अर्धा",
+    "अर्धी",
+    "अर्धे",
+    "aadha",
+    "adha",
+    "aadhi",
+    "ardha",
+    "ardhi",
+    "ardhe"
+   ]
+  }
+ },
+ "decimal_point_words": [
+  "point",
+  "poin",
+  "pt",
+  "पॉइंट",
+  "पॉईंट",
+  "पॉइन्ट",
+  "पोइंट",
+  "पॉंइंट",
+  "दशांश",
+  "dashansh",
+  "dashaansh",
+  "दशमलव",
+  "dashamlav",
+  "dashmalav",
+  "dot",
+  "डॉट",
+  "decimal",
+  "डेसिमल"
+ ],
+ "units": {
+  "kg": [
+   "किलो",
+   "किलोग्राम",
+   "किलोग्रॅम",
+   "किलोग्रम",
+   "किग्रा",
+   "कि.ग्रा.",
+   "केजी",
+   "के जी",
+   "kilo",
+   "kilos",
+   "kilogram",
+   "kilograms",
+   "kilogramme",
+   "kg",
+   "kgs",
+   "k.g."
+  ],
+  "g": [
+   "ग्राम",
+   "ग्रॅम",
+   "ग्रा",
+   "ग्रा.",
+   "ग्राम्स",
+   "gram",
+   "grams",
+   "gramme",
+   "gm",
+   "gms",
+   "g",
+   "gr"
+  ],
+  "cm": [
+   "सेंटीमीटर",
+   "सेंटिमीटर",
+   "सेंटीमिटर",
+   "सेन्टीमीटर",
+   "सेंमी",
+   "सेमी",
+   "से.मी.",
+   "सें.मी.",
+   "सीएम",
+   "सी एम",
+   "centimetre",
+   "centimetres",
+   "centimeter",
+   "centimeters",
+   "cm",
+   "cms",
+   "senti",
+   "santimeter"
+  ],
+  "mm": [
+   "मिलीमीटर",
+   "मिलिमीटर",
+   "मिमी",
+   "मि.मी.",
+   "एमएम",
+   "millimetre",
+   "millimetres",
+   "millimeter",
+   "millimeters",
+   "mm"
+  ],
+  "m": [
+   "मीटर",
+   "मिटर",
+   "meter",
+   "metre",
+   "meters",
+   "metres",
+   "m"
+  ]
+ },
+ "confirm_yes": [
+  "हो",
+  "होय",
+  "हां",
+  "हाँ",
+  "हा",
+  "हां जी",
+  "हाँ जी",
+  "जी",
+  "जी हाँ",
+  "haan",
+  "han",
+  "haa",
+  "haanji",
+  "ha",
+  "ho",
+  "hoy",
+  "hoi",
+  "barobar",
+  "बरोबर",
+  "बरोबर आहे",
+  "barobar aahe",
+  "sahi",
+  "सही",
+  "sahi hai",
+  "सही है",
+  "theek",
+  "thik",
+  "theek hai",
+  "ठीक",
+  "ठीक है",
+  "चालेल",
+  "chalel",
+  "yes",
+  "yeah",
+  "yep",
+  "ok",
+  "okay",
+  "ओके",
+  "correct",
+  "करेक्ट",
+  "right",
+  "राइट"
+ ],
+ "confirm_no": [
+  "नाही",
+  "नाहीं",
+  "नको",
+  "nako",
+  "नहीं",
+  "नही",
+  "ना",
+  "nahi",
+  "nahin",
+  "nai",
+  "na",
+  "galat",
+  "गलत",
+  "गलत है",
+  "chuk",
+  "चूक",
+  "चुकीचे",
+  "चुकीचं",
+  "chukiche",
+  "chukicha",
+  "barobar nahi",
+  "बरोबर नाही",
+  "no",
+  "nope",
+  "wrong",
+  "रॉंग",
+  "रॉन्ग"
+ ]
+}
