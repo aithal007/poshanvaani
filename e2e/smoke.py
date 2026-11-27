@@ -60,8 +60,22 @@ def run(viewport, name, lang_button="English"):
 
         page.get_by_role("button", name="Alerts").click()
         page.screenshot(path=OUT / f"{name}-07-alerts.png", full_page=True)
+        expect(page.get_by_text("Watch list").first).to_be_visible()
+        expect(page.get_by_text("Message for the family").first).to_be_visible()
         page.get_by_role("button", name="Summary").click()
+        expect(page.get_by_text("Data honesty").first).to_be_visible()
         page.screenshot(path=OUT / f"{name}-08-summary.png", full_page=True)
+
+        # Typing race: fill the typical form, the stopwatch measures it.
+        page.get_by_role("button", name="⏱ Typing vs voice").click()
+        page.get_by_placeholder("Type at least 2 letters").fill("Gau")
+        page.get_by_role("button", name="Gauri More").click()
+        page.get_by_label("Lying").check()
+        page.get_by_label("Weight (kg)").fill("7.3")
+        page.get_by_label("Height / length (cm)").fill("68")
+        page.get_by_role("button", name="Submit").click()
+        page.screenshot(path=OUT / f"{name}-10-race.png", full_page=True)
+        page.get_by_role("button", name="Cancel").click()
         page.get_by_role("button", name="Children").click()
         page.get_by_text("Riya Pawar").first.click()
         page.screenshot(path=OUT / f"{name}-09-child-chart.png", full_page=True)

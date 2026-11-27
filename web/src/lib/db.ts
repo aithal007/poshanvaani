@@ -32,6 +32,7 @@ export interface Measurement {
   forced: boolean; // saved despite a plausibility warning
   engine: string; // which speech engine heard it
   audio?: Blob; // short clip of the spoken reading
+  durationMs?: number; // from first word about this child to saved
   synced: boolean;
   voided: boolean;
 }

@@ -10,6 +10,8 @@ import { ageInDays, ageInMonths } from "../lib/who";
 import { BandRibbon } from "./BandRibbon";
 import { GrowthChart } from "./GrowthChart";
 import { referralText, whatsappLink } from "../lib/export";
+import { familyMessage } from "../lib/counsel";
+import { FamilyMessage } from "./Views";
 
 const STATUS_STYLE = {
   normal: "bg-leaf-wash text-leaf",
@@ -36,7 +38,7 @@ function Value({ value, unit, flagged, previous }: { value?: number; unit: strin
 }
 
 export function ReadingCard({
-  draft, phase, saved, lang, t, lastSaid,
+  draft, phase, saved, lang, t, lastSaid, onSpeak,
 }: {
   draft: Draft;
   phase: Phase;
@@ -44,6 +46,7 @@ export function ReadingCard({
   lang: Lang;
   t: Phrases;
   lastSaid: string;
+  onSpeak: (text: string) => void;
 }) {
   const inProgress = !!draft.child || draft.weightKg !== undefined || draft.heightCm !== undefined || phase === "disambiguate";
   const savedChildId = saved?.child.id;
@@ -119,7 +122,7 @@ export function ReadingCard({
             {t.ui.referral}: {t.ui.share}
           </a>
         )}
-        {lastSaid && <p className="mt-4 text-base leading-snug text-ink-soft">“{lastSaid}”</p>}
+        <FamilyMessage text={familyMessage(c, m, previous, lang)} t={t} onSpeak={onSpeak} />
       </section>
     );
   }

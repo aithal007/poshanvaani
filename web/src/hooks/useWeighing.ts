@@ -4,7 +4,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { db, lastMeasurement, todayIso, type Child, type Measurement } from "../lib/db";
 import { Engine, type Draft, type Phase, type Turn } from "../lib/engine";
 import { PHRASES, SPEECH_LANG, type Lang } from "../lib/i18n";
-import { BrowserTts, SarvamStt, SarvamTts, WebSpeechStt, type SttProvider, type TtsProvider } from "../lib/speech";
+import { BrowserTts, SarvamStt, SarvamTts, WebSpeechStt, earcon, type SttProvider, type TtsProvider } from "../lib/speech";
 import { ageInDays, ageInMonths, classify, zScores } from "../lib/who";
 import { isFaltering, type PreviousReading } from "../lib/plausibility";
 
@@ -50,6 +50,8 @@ export function useWeighing(lang: Lang, engineChoice: "webspeech" | "sarvam") {
   handsFreeRef.current = handsFree;
   const lastAudio = useRef<Blob | undefined>(undefined);
   const lastEngineId = useRef<string>("webspeech");
+  const entryStart = useRef<number | null>(null);
+  const [lastHeard, setLastHeard] = useState("");
 
   const stt: SttProvider = useMemo(
     () => (engineChoice === "sarvam" ? new SarvamStt() : new WebSpeechStt()),
@@ -127,6 +129,7 @@ export function useWeighing(lang: Lang, engineChoice: "webspeech" | "sarvam") {
         forced: d.forced,
         engine: engineId,
         audio: lastAudio.current,
+        durationMs: entryStart.current ? Date.now() - entryStart.current : undefined,
         synced: false,
         voided: false,
       };
@@ -170,15 +173,19 @@ export function useWeighing(lang: Lang, engineChoice: "webspeech" | "sarvam") {
     async (turn: Turn): Promise<boolean> => {
       setPhase(turn.phase);
       setDraft(turn.draft);
+      if (turn.phase === "plausibility" || turn.phase === "force") await earcon("warn");
       let speech = turn.say;
       let keepGoing = true;
       switch (turn.effect?.type) {
         case "save": {
           const alert = await saveReading(turn.effect.draft, lastEngineId.current);
+          entryStart.current = null;
+          await earcon("ok");
           speech = [turn.say, alert, phrases.next].filter(Boolean).join(" ");
           break;
         }
         case "pending": {
+          entryStart.current = null;
           const names = pendingChildren.map((c) => (lang === "en" ? c.name.split(" ")[0] : c.nameLocal.split(" ")[0]));
           speech = names.length ? phrases.pending(names) : phrases.nonePending;
           setPanel("pending");
@@ -218,6 +225,7 @@ export function useWeighing(lang: Lang, engineChoice: "webspeech" | "sarvam") {
     setError("");
     setInterim("");
     setMic("listening");
+    if (engine.phase === "listen" && entryStart.current === null) entryStart.current = Date.now();
     let heard;
     try {
       heard = await stt.listen(SPEECH_LANG[lang], setInterim, children.map((c) => c.name));
@@ -233,6 +241,8 @@ export function useWeighing(lang: Lang, engineChoice: "webspeech" | "sarvam") {
     lastAudio.current = heard.audio;
     lastEngineId.current = stt.id;
     setMic("thinking");
+    if (heard.text) setLastHeard(heard.text);
+    else if (engine.phase === "listen") entryStart.current = null;
     if (heard.text) addLog("worker", heard.text, heard.alternatives.length ? `alt: ${heard.alternatives.join(" / ")}` : undefined);
     const turn = engine.handle(heard.text, heard.alternatives);
     return applyTurn(turn);
@@ -266,6 +276,8 @@ export function useWeighing(lang: Lang, engineChoice: "webspeech" | "sarvam") {
   const submitText = useCallback(
     async (text: string) => {
       addLog("worker", text, "typed");
+      setLastHeard(text);
+      if (engine.phase === "listen" && entryStart.current === null) entryStart.current = Date.now();
       lastAudio.current = undefined;
       lastEngineId.current = "manual";
       const turn = engine.handle(text);
@@ -293,8 +305,8 @@ export function useWeighing(lang: Lang, engineChoice: "webspeech" | "sarvam") {
   }, [engine]);
 
   return {
-    children, todays, pendingChildren, mic, phase, draft, interim, lastSaid, log, saved, error,
+    children, todays, pendingChildren, mic, phase, draft, interim, lastSaid, lastHeard, log, saved, error,
     handsFree, setHandsFree, start, stop, submitText, submitKeypad, keypadDraft, setKeypadDraft,
-    panel, setPanel, resetConversation, sttAvailable: stt.available(), sttId: stt.id,
+    panel, setPanel, resetConversation, sttAvailable: stt.available(), sttId: stt.id, speak: say,
   };
 }

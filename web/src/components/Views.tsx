@@ -5,6 +5,10 @@ import type { Lang, Phrases } from "../lib/i18n";
 import { ageInDays, ageInMonths } from "../lib/who";
 import { downloadCsv, referralText, toCsv, whatsappLink } from "../lib/export";
 import { GrowthChart } from "./GrowthChart";
+import { QualityCard } from "./QualityCard";
+import { avg, secs, loadRaces, useVoiceTimes } from "./RaceView";
+import { watchList } from "../lib/watchlist";
+import { familyMessage } from "../lib/counsel";
 import { useState } from "react";
 
 const DOT = { normal: "bg-leaf", mam: "bg-turmeric", sam: "bg-chilli" } as const;
@@ -71,8 +75,31 @@ export function ChildrenView({ roster, lang, t }: { roster: Child[]; lang: Lang;
   );
 }
 
-export function AlertsView({ roster, lang, t }: { roster: Child[]; lang: Lang; t: Phrases }) {
+export function AlertsView({ roster, lang, t, onSpeak }: { roster: Child[]; lang: Lang; t: Phrases; onSpeak: (text: string) => void }) {
   const today = todayIso();
+  const watch = useLiveQuery(async () => watchList(roster, await db.measurements.toArray()), [roster], []);
+  const reasonText = (r: string) => t.ui[`r_${r}`] ?? r;
+  const spoken = watch.map((w) => `${nameOf(w.child, lang)}: ${w.reasons.map(reasonText).join(", ")}`).join(". ");
+  const watchCard = watch.length > 0 && (
+    <section className="bg-sheet rounded-3xl p-4 mb-3">
+      <div className="flex items-center justify-between">
+        <h2 className="font-bold text-lg">{t.ui.watchList}</h2>
+        <button type="button" onClick={() => onSpeak(spoken)} className="rounded-xl bg-ink text-sheet text-sm font-semibold px-3 py-1.5">{t.ui.speakList}</button>
+      </div>
+      <ol className="mt-2 space-y-1.5">
+        {watch.map((w, i) => (
+          <li key={w.child.id} className="flex gap-3 items-baseline">
+            <span className="tabular text-slate w-4">{i + 1}</span>
+            <span className="flex-1">
+              <b>{nameOf(w.child, lang)}</b>
+              <span className="block text-sm text-ink-soft">{w.reasons.map(reasonText).join(" · ")}{w.projectedWhz !== undefined && w.reasons.includes("slide") ? ` (WHZ → ${w.projectedWhz})` : ""}</span>
+            </span>
+            <span className={`w-3 h-3 rounded-full ${w.reasons.includes("sam") ? "bg-chilli" : w.reasons.includes("mam") ? "bg-turmeric" : "bg-ink-soft"}`} />
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
   const rows = useLiveQuery(
     async () => {
       const todays = await db.measurements.where("date").equals(today).filter((m) => !m.voided).toArray();
@@ -91,8 +118,10 @@ export function AlertsView({ roster, lang, t }: { roster: Child[]; lang: Lang; t
     [today, roster],
     []
   );
-  if (!rows.length) return <p className="bg-sheet rounded-3xl p-6 text-lg text-slate">{t.ui.noAlerts}</p>;
+  if (!rows.length) return <>{watchCard}<p className="bg-sheet rounded-3xl p-6 text-lg text-slate">{t.ui.noAlerts}</p></>;
   return (
+    <>
+    {watchCard}
     <ul className="space-y-3">
       {rows.map(({ c, m, prev }) => {
         const text = referralText(c, m, prev);
@@ -109,17 +138,32 @@ export function AlertsView({ roster, lang, t }: { roster: Child[]; lang: Lang; t
             </div>
             <pre className="mt-2 whitespace-pre-wrap font-sans text-sm bg-paper rounded-xl p-3">{text}</pre>
             <a href={whatsappLink(text)} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center rounded-xl bg-leaf text-sheet font-bold px-4 py-2">
-              {t.ui.share}
+              {t.ui.referral}: {t.ui.share}
             </a>
+            <FamilyMessage text={familyMessage(c, m, prev, lang)} t={t} onSpeak={onSpeak} />
           </li>
         );
       })}
     </ul>
+    </>
+  );
+}
+
+export function FamilyMessage({ text, t, onSpeak }: { text: string; t: Phrases; onSpeak: (text: string) => void }) {
+  return (
+    <div className="mt-3 rounded-2xl border-2 border-leaf/40 p-3">
+      <div className="text-sm font-bold text-leaf">{t.ui.familyMsg}</div>
+      <p className="mt-1 leading-snug">{text}</p>
+      <div className="flex gap-2 mt-2">
+        <button type="button" onClick={() => onSpeak(text)} className="rounded-xl bg-ink text-sheet font-semibold px-3 py-1.5">▶ {t.ui.play}</button>
+        <a href={whatsappLink(text)} target="_blank" rel="noreferrer" className="rounded-xl border-2 border-leaf text-leaf font-semibold px-3 py-1">{t.ui.share}</a>
+      </div>
+    </div>
   );
 }
 
 export function SummaryView({
-  roster, todays, pending, lang, t, online, onReset,
+  roster, todays, pending, lang, t, online, onReset, onRace,
 }: {
   roster: Child[];
   todays: Measurement[];
@@ -128,7 +172,11 @@ export function SummaryView({
   t: Phrases;
   online: boolean;
   onReset: () => void;
+  onRace: () => void;
 }) {
+  const voiceTimes = useVoiceTimes();
+  const typed = avg(loadRaces());
+  const spoken = avg(voiceTimes);
   const unsynced = useLiveQuery(() => db.measurements.filter((m) => !m.synced && !m.voided).count(), [], 0);
   const [syncing, setSyncing] = useState(false);
   const counts = { sam: 0, mam: 0, normal: 0 };
@@ -167,6 +215,19 @@ export function SummaryView({
           <div className="rounded-2xl bg-leaf-wash text-leaf py-2"><div className="text-3xl font-extrabold">{counts.normal}</div><div className="text-xs font-semibold">{t.ui.normal}</div></div>
         </div>
         {corrected > 0 && <p className="mt-3 text-sm text-ink-soft">✎ {corrected} {lang === "en" ? "readings corrected before saving" : lang === "hi" ? "एंट्री सेव से पहले सुधारी गईं" : "नोंदी जतन करण्यापूर्वी दुरुस्त"}</p>}
+      </section>
+
+      <QualityCard t={t} />
+
+      <section className="bg-sheet rounded-3xl p-5">
+        <div className="flex items-center justify-between">
+          <h2 className="font-bold text-lg">{t.ui.race}</h2>
+          <button type="button" onClick={onRace} className="rounded-xl bg-ink text-sheet text-sm font-semibold px-3 py-1.5">⏱ {t.ui.race}</button>
+        </div>
+        <div className="grid grid-cols-2 gap-2 mt-3 text-center">
+          <div className="rounded-2xl bg-paper py-2"><div className="text-3xl font-extrabold tabular text-leaf">{secs(spoken)}</div><div className="text-xs text-slate">{t.ui.voiceTime} · {t.ui.perChild} (n={voiceTimes.length})</div></div>
+          <div className="rounded-2xl bg-paper py-2"><div className="text-3xl font-extrabold tabular text-chilli">{secs(typed)}</div><div className="text-xs text-slate">{t.ui.typingTime} · {t.ui.perChild}</div></div>
+        </div>
       </section>
 
       <section className="bg-sheet rounded-3xl p-5">

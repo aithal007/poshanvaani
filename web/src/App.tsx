@@ -8,6 +8,7 @@ import { ReadingCard } from "./components/ReadingCard";
 import { AlertsView, ChildrenView, SummaryView } from "./components/Views";
 import { Keypad } from "./components/Keypad";
 import { LogPanel } from "./components/LogPanel";
+import { RaceView } from "./components/RaceView";
 
 type Tab = "weigh" | "children" | "alerts" | "summary";
 
@@ -33,6 +34,7 @@ export default function App() {
   const [online, setOnline] = useState(navigator.onLine);
   const [server, setServer] = useState({ sarvam: false, reachable: false });
   const [typed, setTyped] = useState("");
+  const [race, setRace] = useState(false);
   const t = PHRASES[lang];
   const w = useWeighing(lang, engine);
 
@@ -114,10 +116,10 @@ export default function App() {
 
         <div className="flex-1 overflow-y-auto px-4 pb-4 min-h-0">
           {tab === "weigh" && (
-            <ReadingCard draft={w.draft} phase={w.phase} saved={w.saved} lang={lang} t={t} lastSaid={w.lastSaid} />
+            <ReadingCard draft={w.draft} phase={w.phase} saved={w.saved} lang={lang} t={t} lastSaid={w.lastSaid} onSpeak={(x) => void w.speak(x)} />
           )}
           {tab === "children" && <ChildrenView roster={w.children} lang={lang} t={t} />}
-          {tab === "alerts" && <AlertsView roster={w.children} lang={lang} t={t} />}
+          {tab === "alerts" && <AlertsView roster={w.children} lang={lang} t={t} onSpeak={(x) => void w.speak(x)} />}
           {tab === "summary" && (
             <>
               <SummaryView
@@ -128,6 +130,7 @@ export default function App() {
                 t={t}
                 online={online}
                 onReset={() => void seedIfEmpty(true).then(() => location.reload())}
+                onRace={() => setRace(true)}
               />
               <section className="bg-sheet rounded-3xl p-5 mt-3 space-y-2">
                 <h2 className="font-bold text-lg">{t.ui.settings}</h2>
@@ -161,6 +164,19 @@ export default function App() {
             <p className="min-h-7 text-center text-lg text-ink-soft leading-snug" aria-live="polite">
               {w.mic === "listening" ? (w.interim ? <>{t.ui.heard}: <b className="text-ink">{w.interim}</b></> : t.ui.listening) : w.error ? <span className="text-chilli">{w.error === "network" ? "Speech needs internet: use the keypad offline" : w.error}</span> : ""}
             </p>
+            {w.lastHeard && (
+              <div className="w-full grid grid-cols-[auto_1fr] gap-x-2 text-sm leading-snug bg-sheet rounded-xl px-3 py-2" aria-live="polite">
+                <span className="text-slate">{t.ui.heardLabel}</span>
+                <span className="font-semibold truncate">“{w.lastHeard}”</span>
+                <span className="text-slate">{t.ui.understood}</span>
+                <span className="truncate">
+                  {w.draft.child ? (lang === "en" ? w.draft.child.name : w.draft.child.nameLocal) : w.saved && w.phase === "listen" ? (lang === "en" ? w.saved.child.name : w.saved.child.nameLocal) : "—"}
+                  {(w.draft.weightKg ?? (w.phase === "listen" ? w.saved?.measurement.weightKg : undefined)) !== undefined && ` · ${w.draft.weightKg ?? w.saved?.measurement.weightKg} kg`}
+                  {(w.draft.heightCm ?? (w.phase === "listen" ? w.saved?.measurement.heightCm : undefined)) !== undefined && ` · ${w.draft.heightCm ?? w.saved?.measurement.heightCm} cm`}
+                  {w.phase === "plausibility" || w.phase === "force" ? <b className="text-turmeric"> · check</b> : w.phase === "confirm" ? <b className="text-leaf"> · plausible</b> : w.phase === "listen" && w.saved ? <b className="text-leaf"> · saved</b> : ""}
+                </span>
+              </div>
+            )}
             <div className="flex items-center gap-6">
               <button type="button" onClick={() => w.setKeypadDraft(w.draft)} className="w-14 h-14 rounded-full bg-sheet shadow grid place-items-center text-xl font-bold" aria-label={t.ui.keypad}>
                 123
@@ -205,6 +221,8 @@ export default function App() {
       <div className="hidden lg:block min-h-0">
         <LogPanel log={w.log} phase={w.phase} />
       </div>
+
+      {race && <RaceView roster={w.children} t={t} onClose={() => setRace(false)} />}
 
       {w.keypadDraft && (
         <Keypad

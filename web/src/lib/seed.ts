@@ -66,6 +66,7 @@ export function buildSeed(today = new Date()) {
 
     const visits = s.weighedToday ? [3, 2, 1, 0] : [3, 2, 1];
     let prevHeight: number | undefined;
+    let prevWeight: number | undefined;
     visits.forEach((back, k) => {
       const at = new Date(today.getTime() - back * 30 * DAY + (back ? 0 : -2 * 3600 * 1000));
       const ageDays = Math.round((at.getTime() - dobDate.getTime()) / DAY);
@@ -77,11 +78,13 @@ export function buildSeed(today = new Date()) {
       // registers, they heap on .0/.5 and some heights are copied forward.
       // Today's readings were captured live by voice at full precision.
       if (back > 0) {
-        if (!s.weights && i % 3 !== 0) weightKg = Math.round(weightKg * 2) / 2;
+        const heaped = Math.round(weightKg * 2) / 2;
+        if (!s.weights && i % 3 !== 0 && heaped !== prevWeight) weightKg = heaped;
         if (i % 4 === 1 && prevHeight !== undefined) heightCm = prevHeight;
         else if (i % 3 !== 2) heightCm = Math.round(heightCm * 2) / 2;
       }
       prevHeight = heightCm;
+      prevWeight = weightKg;
       const z = zScores(s.sex, ageDays, weightKg, heightCm);
       const c = classify(z);
       measurements.push({

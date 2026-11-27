@@ -25,16 +25,22 @@ export interface QualityRow {
   transcript: string;
 }
 
-/** WHO MONICA / SMART digit preference score, 0 (none) .. 100 (all one digit). */
-export function digitPreferenceScore(values: number[]): { dps: number; counts: number[] } {
+/**
+ * WHO MONICA / SMART digit preference score, 0 (none) .. 100 (all one digit).
+ * `adjusted` subtracts the value expected by chance for this sample size
+ * (E[chi2] = df under uniform digits, so DPS ≈ 100/sqrt(n)): one centre has
+ * only 20–40 children, where the raw score is inflated.
+ */
+export function digitPreferenceScore(values: number[]): { dps: number; adjusted: number; counts: number[] } {
   const counts = Array(10).fill(0) as number[];
   for (const v of values) counts[Math.round(v * 10) % 10]++;
   const n = values.length;
-  if (n === 0) return { dps: 0, counts };
+  if (n === 0) return { dps: 0, adjusted: 0, counts };
   const expected = n / 10;
   const chi2 = counts.reduce((s, o) => s + (o - expected) ** 2 / expected, 0);
   const dps = 100 * Math.sqrt(chi2 / (9 * n));
-  return { dps: Math.round(dps * 10) / 10, counts };
+  const adjusted = Math.max(0, dps - 100 / Math.sqrt(n));
+  return { dps: Math.round(dps * 10) / 10, adjusted: Math.round(adjusted * 10) / 10, counts };
 }
 
 /** SMART bands for DPS. */
@@ -50,8 +56,8 @@ export function sd(values: number[]): number | null {
 
 export interface QualityReport {
   n: number;
-  weightDps: number;
-  heightDps: number;
+  weightDps: number; // small-sample adjusted
+  heightDps: number; // small-sample adjusted
   weightDigits: number[];
   heightDigits: number[];
   copiedHeights: number; // same height as the child's previous reading
@@ -101,9 +107,9 @@ export function assessQuality(current: QualityRow[], history: QualityRow[]): Qua
   const liveVoiceShare = n ? live / n : 0;
 
   // Penalties out of 100. DPS penalties start above the SMART "good" band.
-  const meanDps = (w.dps + h.dps) / 2;
+  const meanDps = (w.adjusted + h.adjusted) / 2;
   let score = 100;
-  score -= Math.min(35, Math.max(0, meanDps - 10) * 1.75);
+  score -= Math.min(40, Math.max(0, meanDps - 7) * 2);
   score -= n ? Math.min(30, (copiedHeights / n) * 100) : 0;
   score -= Math.min(15, duplicates * 3);
   score -= Math.min(20, implausible * 10);
@@ -112,8 +118,8 @@ export function assessQuality(current: QualityRow[], history: QualityRow[]): Qua
 
   return {
     n,
-    weightDps: w.dps,
-    heightDps: h.dps,
+    weightDps: w.adjusted,
+    heightDps: h.adjusted,
     weightDigits: w.counts,
     heightDigits: h.counts,
     copiedHeights,

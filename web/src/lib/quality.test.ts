@@ -17,6 +17,12 @@ describe("digit preference score", () => {
     expect(r.counts[0]).toBe(20);
     expect(r.counts[5]).toBe(20);
     expect(dpsBand(r.dps)).toBe("problematic");
+    expect(r.adjusted).toBeGreaterThan(20);
+  });
+
+  it("does not flag a small honest sample (bias-adjusted)", () => {
+    const values = [6.6, 10.9, 8.3, 16.8, 12.4, 9.7, 14.1, 11.2];
+    expect(digitPreferenceScore(values).adjusted).toBeLessThan(13);
   });
 });
 

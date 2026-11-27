@@ -10,7 +10,7 @@ const fmt = (n: number) => String(Math.round(n * 100) / 100);
 
 export interface Phrases {
   ready: string;
-  readback: (name: string, w?: number, h?: number) => string;
+  readback: (name: string, w?: number, h?: number, deltaG?: number | null) => string;
   saved: string;
   next: string;
   whichChild: (a: string, b: string) => string;
@@ -33,8 +33,8 @@ export interface Phrases {
 
 const mr: Phrases = {
   ready: "तयार. मुलाचे नाव, वजन आणि उंची सांगा.",
-  readback: (n, w, h) =>
-    `${n}. ${w !== undefined ? `वजन ${fmt(w)} किलो` : ""}${h !== undefined ? `, उंची ${fmt(h)} सेंटीमीटर` : ""}. बरोबर?`,
+  readback: (n, w, h, d) =>
+    `${n}. ${w !== undefined ? `वजन ${fmt(w)} किलो` : ""}${h !== undefined ? `, उंची ${fmt(h)} सेंटीमीटर` : ""}.${d ? ` ${Math.abs(d)} ग्रॅम ${d > 0 ? "वाढ" : "घट"}.` : ""} बरोबर?`,
   saved: "जतन केले.",
   next: "पुढचे मूल.",
   whichChild: (a, b) => `${a} की ${b}?`,
@@ -70,14 +70,14 @@ const mr: Phrases = {
     endSession: "सत्र संपवा", pendingList: "बाकी मुले", noAlerts: "आज कोणतीही सूचना नाही",
     keypad: "आकडे भरा", save: "जतन करा", cancel: "रद्द", settings: "सेटिंग्ज", language: "भाषा",
     voiceEngine: "आवाज ओळख", keyNotSet: "key not set", handsFree: "हात मोकळे मोड", history: "इतिहास",
-    faltering: "वजन वाढले नाही", whichOne: "कोणते मूल?", reset: "डेमो डेटा पुन्हा भरा", suggestion: "कदाचित",
+    faltering: "वजन वाढले नाही", whichOne: "कोणते मूल?", heardLabel: "ऐकले", understood: "समजले", familyMsg: "कुटुंबासाठी संदेश", play: "ऐकवा", honesty: "डेटा विश्वासार्हता", typedLater: "नंतर टाइप केलेले", spokenLive: "वजनकाट्यावरच बोललेले", digitPref: "अंक-पसंती", copied: "कॉपी केलेली उंची", voiceShare: "आवाजाने नोंद", watchList: "लक्ष ठेवा", speakList: "यादी ऐकवा", race: "टायपिंग विरुद्ध आवाज", typingTime: "टायपिंग", voiceTime: "आवाज", perChild: "प्रति मूल", r_sam: "तीव्र कुपोषण", r_mam: "मध्यम कुपोषण", r_flat2: "दोन महिने वजन वाढले नाही", r_slide: "वजन-उंची घसरत आहे", r_slow: "वजन खूप हळू वाढते", indicative: "अंदाजे", reset: "डेमो डेटा पुन्हा भरा", suggestion: "कदाचित",
   },
 };
 
 const hi: Phrases = {
   ready: "तैयार. बच्चे का नाम, वजन और लंबाई बोलिए.",
-  readback: (n, w, h) =>
-    `${n}. ${w !== undefined ? `वजन ${fmt(w)} किलो` : ""}${h !== undefined ? `, लंबाई ${fmt(h)} सेंटीमीटर` : ""}. सही है?`,
+  readback: (n, w, h, d) =>
+    `${n}. ${w !== undefined ? `वजन ${fmt(w)} किलो` : ""}${h !== undefined ? `, लंबाई ${fmt(h)} सेंटीमीटर` : ""}.${d ? ` ${Math.abs(d)} ग्राम ${d > 0 ? "बढ़ा" : "घटा"}.` : ""} सही है?`,
   saved: "सेव हो गया.",
   next: "अगला बच्चा.",
   whichChild: (a, b) => `${a} या ${b}?`,
@@ -113,14 +113,14 @@ const hi: Phrases = {
     endSession: "सत्र खत्म करें", pendingList: "बाकी बच्चे", noAlerts: "आज कोई अलर्ट नहीं",
     keypad: "नंबर भरें", save: "सेव करें", cancel: "रद्द", settings: "सेटिंग्स", language: "भाषा",
     voiceEngine: "आवाज़ पहचान", keyNotSet: "key not set", handsFree: "हैंड्स-फ्री मोड", history: "इतिहास",
-    faltering: "वजन नहीं बढ़ा", whichOne: "कौन सा बच्चा?", reset: "डेमो डेटा फिर से भरें", suggestion: "शायद",
+    faltering: "वजन नहीं बढ़ा", whichOne: "कौन सा बच्चा?", heardLabel: "सुना", understood: "समझा", familyMsg: "परिवार के लिए संदेश", play: "सुनाएँ", honesty: "डेटा विश्वसनीयता", typedLater: "बाद में टाइप किया", spokenLive: "तराजू पर ही बोला", digitPref: "अंक-पसंद", copied: "कॉपी की गई लंबाई", voiceShare: "आवाज़ से एंट्री", watchList: "ध्यान दें", speakList: "सूची सुनाएँ", race: "टाइपिंग बनाम आवाज़", typingTime: "टाइपिंग", voiceTime: "आवाज़", perChild: "प्रति बच्चा", r_sam: "गंभीर कुपोषण", r_mam: "मध्यम कुपोषण", r_flat2: "दो महीने से वजन नहीं बढ़ा", r_slide: "वजन-लंबाई गिर रही है", r_slow: "वजन बहुत धीरे बढ़ रहा", indicative: "संकेतात्मक", reset: "डेमो डेटा फिर से भरें", suggestion: "शायद",
   },
 };
 
 const en: Phrases = {
   ready: "Ready. Say the child's name, weight and height.",
-  readback: (n, w, h) =>
-    `${n}. ${w !== undefined ? `${fmt(w)} kilo` : ""}${h !== undefined ? `, ${fmt(h)} centimetre` : ""}. Correct?`,
+  readback: (n, w, h, d) =>
+    `${n}. ${w !== undefined ? `${fmt(w)} kilo` : ""}${h !== undefined ? `, ${fmt(h)} centimetre` : ""}.${d ? ` ${d > 0 ? "Up" : "Down"} ${Math.abs(d)} grams.` : ""} Correct?`,
   saved: "Saved.",
   next: "Next child.",
   whichChild: (a, b) => `${a} or ${b}?`,
@@ -154,7 +154,7 @@ const en: Phrases = {
     endSession: "End session", pendingList: "Not weighed yet", noAlerts: "No alerts today",
     keypad: "Enter numbers", save: "Save", cancel: "Cancel", settings: "Settings", language: "Language",
     voiceEngine: "Speech engine", keyNotSet: "key not set", handsFree: "Hands-free mode", history: "History",
-    faltering: "No weight gain", whichOne: "Which child?", reset: "Reload demo data", suggestion: "Maybe",
+    faltering: "No weight gain", whichOne: "Which child?", heardLabel: "Heard", understood: "Understood", familyMsg: "Message for the family", play: "Play aloud", honesty: "Data honesty", typedLater: "Typed in later", spokenLive: "Spoken at the scale", digitPref: "Digit preference", copied: "Heights copied", voiceShare: "Captured by voice", watchList: "Watch list", speakList: "Speak the list", race: "Typing vs voice", typingTime: "Typing", voiceTime: "Voice", perChild: "per child", r_sam: "Severe acute malnutrition", r_mam: "Moderate acute malnutrition", r_flat2: "No weight gain for 2 months", r_slide: "Weight-for-height sliding", r_slow: "Gaining too slowly", indicative: "indicative", reset: "Reload demo data", suggestion: "Maybe",
   },
 };
 

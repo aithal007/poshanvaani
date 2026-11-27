@@ -308,3 +308,29 @@ export async function serverConfig(): Promise<{ sarvam: boolean; reachable: bool
     return { sarvam: false, reachable: false };
   }
 }
+
+// ---------- earcons ----------
+
+let audioCtx: AudioContext | undefined;
+
+/** Short non-verbal cues: "ok" (rising) when saved, "warn" (falling) when a value needs checking. */
+export function earcon(kind: "ok" | "warn"): Promise<void> {
+  if (MUTED || typeof AudioContext === "undefined") return Promise.resolve();
+  audioCtx ??= new AudioContext();
+  const ctx = audioCtx;
+  const notes = kind === "ok" ? [660, 990] : [520, 390];
+  notes.forEach((f, i) => {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    const t = ctx.currentTime + i * 0.13;
+    o.frequency.value = f;
+    o.type = "sine";
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.25, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+    o.connect(g).connect(ctx.destination);
+    o.start(t);
+    o.stop(t + 0.13);
+  });
+  return new Promise((r) => setTimeout(r, 300));
+}

@@ -313,7 +313,9 @@ export class Engine {
 
   private readback(): string {
     const d = this.draft;
-    return this.deps.phrases.readback(this.displayName(d.child!), d.weightKg, d.heightCm);
+    const prev = this.deps.previous(d.child!.id);
+    const delta = prev && d.weightKg !== undefined ? Math.round((d.weightKg - prev.weightKg) * 1000) : null;
+    return this.deps.phrases.readback(this.displayName(d.child!), d.weightKg, d.heightCm, delta);
   }
 
   private plausibilityQuestion(issue: Issue): string {
